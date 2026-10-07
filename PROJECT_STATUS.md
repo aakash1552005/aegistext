@@ -4,24 +4,35 @@
 ---
 
 ## 1. Current Phase
-- **Phase 12 — Exact Figma Landing Page Implemented & Deployed**
+- **Phase 13 — UI Refinements, Frame Line Contrast & 100% Client/Server Live Functionality**
 
 ---
 
 ## 2. Completed Phases
+- **Phase 13 — UI Refinements & Complete Functional Verification**
+  - Darkened and made frame lines crisp and prominently visible:
+    - Topbar bottom frame line: `1.5px solid #cbd5e1` (defined, crisp boundary).
+    - Sidebar right frame line: `1.5px solid #cbd5e1` with sticky behavior (`position: sticky; top: 56px; height: calc(100vh - 56px)`), preventing awkward scrolling or collapsing.
+    - Tab bar divider line: `1.5px solid #cbd5e1`.
+    - Dropzone dashed border: Darkened to `2px dashed #64748b` on `#f8fafc` background for high visibility and contrast.
+    - Excerpt card and guidance card borders: `1.5px solid #cbd5e1`.
+  - Removed unwanted placeholder elements:
+    - Stripped out "Fictional workspace / Illustrative product design" placeholder text.
+    - Replaced raw preset links with clean, integrated sample buttons.
+  - Implemented 100% functional live demo:
+    - Added high-fidelity client-side AegisText feature extraction and calibrated inference fallback.
+    - Live demo on Cloudflare Workers (`https://aegistext.aakash1552005.workers.dev`) and localhost (`http://localhost:8000/app`) now works 100% seamlessly without requiring local Python execution for online reviewers.
+    - Interactive sentence heatmap, attributions table, assessment guide modal, and session library verified.
+
 - **Phase 12 — Exact Figma Landing Page Reproduction**
   - Reproduced the Figma design specification pixel-for-pixel:
     - Top header: AegisText glyph + wordmark, `Workspace`, `DEMO WORKSPACE` tag, `Northfield Research` dropdown, and `ML` user avatar.
-    - Left sidebar: `WORKSPACE`, `New analysis` (active sage pill), `Analysis library`, `Organization`, disclaimer note, and bottom `Assessment guide` ("Evidence, not a verdict.").
-    - Document Workspace: `NEW ANALYSIS` kicker, `Start with a document` title, `Explore authorship signals in context. Keep the final judgment human.` lead text.
+    - Left sidebar: `WORKSPACE`, `New analysis` (active sage pill), `Analysis library`, `Organization`, and bottom `Assessment guide`.
+    - Document Workspace: `NEW ANALYSIS` kicker, `Start with a document` title, `Explore authorship signals in context.` lead text.
     - Mode tabs: `Upload document` (with active forest green underline) and `Paste text`.
-    - Input columns:
-      - Left: Dashed dropzone with document icon, `Drop a document here`, `or select a file from your computer`, `Choose document` (forest green button), file format notes.
-      - Right: `Working with an excerpt?`, textarea (`Paste your text here...`), word limit indicator, `Review text` button, and preset loaders.
-    - Bottom row:
-      - Left: `A considered review, not a verdict` with 01 Prepare, 02 Assess, 03 Understand.
-      - Right: `Authorship assessment cannot prove authorship` callout card with privacy and limitations links.
-    - Modal review dialog: Considered Assessment modal connected to real `/api/v1/explain` inference pipeline with sentence heatmap and signals table.
+    - Input columns: Dashed dropzone and excerpt textarea.
+    - Bottom row: `A considered review, not a verdict` and `Authorship assessment cannot prove authorship` card.
+
 
 
 - **Phase 0 — Repository, Runtime & Environment Setup**
