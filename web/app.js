@@ -1,176 +1,207 @@
 /**
- * AegisText — Document Intelligence & Authorship Analysis Controller
- * UI Reset & Design Freeze Edition: Clean, Modular, and Robust
+ * AegisText — Document Intelligence & Authorship Analysis
+ * Controller for the Figma-Matched Landing Page
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // DOM Elements: Navigation
-  const navTabs = document.querySelectorAll(".nav-tab");
-  const pageViews = document.querySelectorAll(".page-view");
+  // Navigation: Sidebar
+  const navNewAnalysis = document.getElementById("navNewAnalysis");
+  const navLibrary = document.getElementById("navLibrary");
+  const navOrganization = document.getElementById("navOrganization");
+  const workspacePages = document.querySelectorAll(".workspace-page");
 
-  // DOM Elements: Document Input
-  const inputText = document.getElementById("inputText");
-  const fileUpload = document.getElementById("fileUpload");
-  const btnClearText = document.getElementById("btnClearText");
-  const wordCountLabel = document.getElementById("wordCountLabel");
-  const charCountLabel = document.getElementById("charCountLabel");
-  const readTimeLabel = document.getElementById("readTimeLabel");
-  const toggleSanitize = document.getElementById("toggleSanitize");
-  const btnAnalyze = document.getElementById("btnAnalyze");
-  const btnAnalyzeText = document.getElementById("btnAnalyzeText");
+  // Document Tabs
+  const tabUpload = document.getElementById("tabUpload");
+  const tabPaste = document.getElementById("tabPaste");
 
-  // DOM Elements: Sample Presets
-  const btnPresetHuman = document.getElementById("btnPresetHuman");
-  const btnPresetAi = document.getElementById("btnPresetAi");
-  const btnPresetHumanized = document.getElementById("btnPresetHumanized");
+  // Dropzone Elements
+  const dropzoneArea = document.getElementById("dropzoneArea");
+  const fileInput = document.getElementById("fileInput");
+  const btnChooseFile = document.getElementById("btnChooseFile");
 
-  // DOM Elements: Results
-  const resultContainer = document.getElementById("resultContainer");
-  const latencyTag = document.getElementById("latencyTag");
-  const verdictTitle = document.getElementById("verdictTitle");
-  const verdictDesc = document.getElementById("verdictDesc");
-  const probNumber = document.getElementById("probNumber");
-  const probProgressFill = document.getElementById("probProgressFill");
-  const evidenceStrength = document.getElementById("evidenceStrength");
-  const confidenceDetail = document.getElementById("confidenceDetail");
+  // Excerpt Textarea Elements
+  const excerptTextarea = document.getElementById("excerptTextarea");
+  const wordCountNotice = document.getElementById("wordCountNotice");
+  const btnReviewText = document.getElementById("btnReviewText");
 
-  const defenseNotice = document.getElementById("defenseNotice");
-  const defenseNoticeText = document.getElementById("defenseNoticeText");
+  // Preset Sample Links
+  const presetAcademic = document.getElementById("presetAcademic");
+  const presetSynthetic = document.getElementById("presetSynthetic");
+  const presetHumanized = document.getElementById("presetHumanized");
 
-  // DOM Elements: Detailed Analysis
-  const sentenceHeatmapBox = document.getElementById("sentenceHeatmapBox");
-  const sentenceDetailBox = document.getElementById("sentenceDetailBox");
-  const detailSentenceIndex = document.getElementById("detailSentenceIndex");
-  const detailSentenceProb = document.getElementById("detailSentenceProb");
-  const detailSentenceText = document.getElementById("detailSentenceText");
+  // Modal: Review & Assessment
+  const analysisModal = document.getElementById("analysisModal");
+  const btnCloseAnalysis = document.getElementById("btnCloseAnalysis");
+  const btnCloseReview = document.getElementById("btnCloseReview");
+
+  // Modal Assessment Elements
+  const reviewDocTitle = document.getElementById("reviewDocTitle");
+  const assessmentState = document.getElementById("assessmentState");
+  const assessmentExplanation = document.getElementById("assessmentExplanation");
+  const assessmentProb = document.getElementById("assessmentProb");
+  const assessmentProbFill = document.getElementById("assessmentProbFill");
+  const assessmentConfidence = document.getElementById("assessmentConfidence");
+  const assessmentLatency = document.getElementById("assessmentLatency");
+
+  const adversarialNotice = document.getElementById("adversarialNotice");
+  const adversarialNoticeText = document.getElementById("adversarialNoticeText");
+
+  const sentencesProseBox = document.getElementById("sentencesProseBox");
+  const selectedSentenceBox = document.getElementById("selectedSentenceBox");
+  const selSentenceId = document.getElementById("selSentenceId");
+  const selSentenceScore = document.getElementById("selSentenceScore");
+  const selSentenceText = document.getElementById("selSentenceText");
 
   const signalsTableBody = document.getElementById("signalsTableBody");
-  const diagnosticsList = document.getElementById("diagnosticsList");
+  const libraryTableBody = document.getElementById("libraryTableBody");
 
-  // DOM Elements: Actions & History
+  // Actions: Export & Print
   const btnExportJson = document.getElementById("btnExportJson");
   const btnPrintReport = document.getElementById("btnPrintReport");
-  const historyTableBody = document.getElementById("historyTableBody");
-  const btnClearHistory = document.getElementById("btnClearHistory");
+  const toggleShield = document.getElementById("toggleShield");
 
-  // App State
+  // State
   let currentAnalysis = null;
-  let sessionHistory = [];
+  let sessionAnalyses = [];
 
-  // Sample Documents
+  // Curated Preset Texts
   const PRESETS = {
-    human: (
+    academic: (
       "Recent investigations into distributed consensus algorithms reveal fundamental " +
       "trade-offs between latency and partition tolerance. In asynchronous networks, deterministic " +
       "consensus cannot be guaranteed in the presence of even a single unannounced crash failure. " +
       "Empirical benchmarks across geo-distributed nodes demonstrate that speculative execution mitigates " +
-      "tail latency by up to thirty-four percent without violating linearizability guarantees."
+      "tail latency by up to thirty-four percent without violating linearizability guarantees. " +
+      "We formalize these empirical boundaries within an asynchronous state-machine replication model, " +
+      "evaluating worst-case Byzantine fault configurations under high packet-drop regimes."
     ),
-    ai: (
+    synthetic: (
       "In conclusion, distributed consensus mechanisms represent a pivotal foundation of modern decentralized architecture. " +
       "Furthermore, it is crucial to recognize that latency and fault tolerance must be carefully balanced to achieve optimal throughput. " +
       "Moreover, empirical evaluations clearly demonstrate that speculative execution plays an essential role in improving overall " +
-      "system reliability and cryptographic security in contemporary digital ecosystems."
+      "system reliability and cryptographic security in contemporary digital ecosystems. " +
+      "Consequently, architects must adopt a holistic framework to navigate complex trade-offs across asynchronous cloud clusters."
     ),
     humanized: (
       "Honestly, when looking at distributed c\u200bonsensus, there are some pretty major trade-offs between speed and network partition tolerance. " +
       "As it turns out, in asynchronous setups, you just can't guarantee consensus if even a single node crashes unexpectedly. " +
-      "To be fair, testing across multiple cloud regions shows that running speculative execution cuts tail latency by almost thirty-five percent."
+      "To be fair, testing across multiple cloud regions shows that running speculative execution cuts tail latency by almost thirty-five percent " +
+      "without messing with linearizability guarantees."
     ),
   };
 
   // =========================================================================
-  // 1. Navigation Switching
+  // 1. Sidebar Page Switching
   // =========================================================================
-  navTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const targetId = tab.dataset.target;
+  function switchPage(pageId, activeBtn) {
+    workspacePages.forEach((p) => p.classList.add("hidden"));
+    [navNewAnalysis, navLibrary, navOrganization].forEach((b) => b.classList.remove("active"));
 
-      navTabs.forEach((t) => t.classList.remove("active"));
-      pageViews.forEach((view) => view.classList.add("hidden"));
-
-      tab.classList.add("active");
-      const targetView = document.getElementById(targetId);
-      if (targetView) {
-        targetView.classList.remove("hidden");
-      }
-    });
-  });
-
-  // =========================================================================
-  // 2. Document Metrics & Input Listeners
-  // =========================================================================
-  function updateDocumentMetrics() {
-    const text = inputText.value;
-    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-    const chars = text.length;
-    const readMinutes = Math.max(1, Math.ceil(words / 220));
-
-    wordCountLabel.textContent = words.toLocaleString();
-    charCountLabel.textContent = chars.toLocaleString();
-    readTimeLabel.textContent = words > 0 ? readMinutes : 0;
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) targetPage.classList.remove("hidden");
+    if (activeBtn) activeBtn.classList.add("active");
   }
 
-  inputText.addEventListener("input", updateDocumentMetrics);
+  navNewAnalysis.addEventListener("click", () => switchPage("viewNewAnalysis", navNewAnalysis));
+  navLibrary.addEventListener("click", () => {
+    switchPage("viewLibrary", navLibrary);
+    renderLibrary();
+  });
+  navOrganization.addEventListener("click", () => switchPage("viewOrganization", navOrganization));
 
-  // File Upload
-  fileUpload.addEventListener("change", (e) => {
+  // =========================================================================
+  // 2. Tabs: Upload Document vs Paste Text
+  // =========================================================================
+  tabUpload.addEventListener("click", () => {
+    tabUpload.classList.add("active");
+    tabPaste.classList.remove("active");
+  });
+
+  tabPaste.addEventListener("click", () => {
+    tabPaste.classList.add("active");
+    tabUpload.classList.remove("active");
+    excerptTextarea.focus();
+  });
+
+  // =========================================================================
+  // 3. Excerpt Word Counter
+  // =========================================================================
+  function updateExcerptStats() {
+    const text = excerptTextarea.value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    wordCountNotice.textContent = `${words} words · Minimum 150 words`;
+  }
+
+  excerptTextarea.addEventListener("input", updateExcerptStats);
+
+  // Preset Loaders
+  presetAcademic.addEventListener("click", () => {
+    excerptTextarea.value = PRESETS.academic;
+    updateExcerptStats();
+  });
+
+  presetSynthetic.addEventListener("click", () => {
+    excerptTextarea.value = PRESETS.synthetic;
+    updateExcerptStats();
+  });
+
+  presetHumanized.addEventListener("click", () => {
+    excerptTextarea.value = PRESETS.humanized;
+    updateExcerptStats();
+  });
+
+  // =========================================================================
+  // 4. File Dropzone & Selection
+  // =========================================================================
+  btnChooseFile.addEventListener("click", () => fileInput.click());
+
+  fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        inputText.value = event.target.result;
-        updateDocumentMetrics();
-      };
-      reader.readAsText(file);
-    }
+    if (file) handleFile(file);
   });
 
-  // Clear Document
-  btnClearText.addEventListener("click", () => {
-    inputText.value = "";
-    updateDocumentMetrics();
-    resultContainer.classList.add("hidden");
-    currentAnalysis = null;
+  dropzoneArea.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzoneArea.classList.add("dragover");
   });
 
-  // Preset Buttons
-  btnPresetHuman.addEventListener("click", () => {
-    inputText.value = PRESETS.human;
-    updateDocumentMetrics();
+  dropzoneArea.addEventListener("dragleave", () => {
+    dropzoneArea.classList.remove("dragover");
   });
 
-  btnPresetAi.addEventListener("click", () => {
-    inputText.value = PRESETS.ai;
-    updateDocumentMetrics();
+  dropzoneArea.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzoneArea.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
   });
 
-  btnPresetHumanized.addEventListener("click", () => {
-    inputText.value = PRESETS.humanized;
-    updateDocumentMetrics();
-  });
-
-  // Keyboard shortcut: Ctrl+Enter / Cmd+Enter
-  window.addEventListener("keydown", (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-      runAnalysis();
-    }
-  });
-
-  btnAnalyze.addEventListener("click", runAnalysis);
+  function handleFile(file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target.result;
+      excerptTextarea.value = content;
+      updateExcerptStats();
+      analyzeText(content, file.name);
+    };
+    reader.readAsText(file);
+  }
 
   // =========================================================================
-  // 3. Analysis Pipeline
+  // 5. Review Text & ML Analysis Pipeline
   // =========================================================================
-  async function runAnalysis() {
-    const text = inputText.value.trim();
+  btnReviewText.addEventListener("click", () => {
+    const text = excerptTextarea.value.trim();
     if (!text || text.length < 10) {
-      alert("Please provide at least 10 characters to analyze.");
+      alert("Please provide at least 10 characters to evaluate.");
       return;
     }
+    analyzeText(text, "Document Excerpt");
+  });
 
-    btnAnalyze.disabled = true;
-    btnAnalyzeText.textContent = "Analyzing Document...";
+  async function analyzeText(text, docTitle = "Document Review") {
+    btnReviewText.disabled = true;
+    btnReviewText.textContent = "Analyzing...";
 
     try {
       const response = await fetch("/api/v1/explain", {
@@ -178,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           text: text,
-          sanitize_adversarial: toggleSanitize.checked,
+          sanitize_adversarial: toggleShield ? toggleShield.checked : true,
         }),
       });
 
@@ -188,88 +219,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
       currentAnalysis = data;
-      renderResults(data, text);
-      addToHistory(data, text);
+      renderAnalysisModal(data, docTitle, text);
+      recordAnalysis(data, docTitle, text);
     } catch (err) {
       console.error(err);
-      alert("Analysis failed. Please verify that the AegisText engine is running on localhost:8000.");
+      alert("Inference request failed. Please ensure the AegisText engine is running on localhost:8000.");
     } finally {
-      btnAnalyze.disabled = false;
-      btnAnalyzeText.textContent = "Analyze Document";
+      btnReviewText.disabled = false;
+      btnReviewText.textContent = "Review text";
     }
   }
 
   // =========================================================================
-  // 4. Render Simple Assessment with Progressive Disclosure
+  // 6. Render Modal Assessment (Considered Review)
   // =========================================================================
-  function renderResults(data, originalText) {
-    resultContainer.classList.remove("hidden");
-
+  function renderAnalysisModal(data, title, fullText) {
+    reviewDocTitle.textContent = title;
     const det = data.detection;
     const prob = det.ai_probability;
     const percentage = Math.round(prob * 100);
 
-    latencyTag.textContent = `${det.processing_time_ms} ms`;
-    probNumber.textContent = `${percentage}%`;
-    probProgressFill.style.width = `${percentage}%`;
+    // 1. Overall Assessment
+    assessmentProb.textContent = `${percentage}%`;
+    assessmentProbFill.style.width = `${percentage}%`;
+    assessmentLatency.textContent = `Latency: ${det.processing_time_ms} ms`;
 
-    // High Level Verdict
     if (det.classification === "AI_GENERATED") {
-      verdictTitle.textContent = "AI-Generated Likely";
-      verdictTitle.className = "verdict-title ai";
-      verdictDesc.textContent = "Linguistic and discourse markers indicate synthetic text generation.";
-      probProgressFill.className = "progress-bar-fill ai";
-    } else {
-      verdictTitle.textContent = "Human-Authored Likely";
-      verdictTitle.className = "verdict-title human";
-      verdictDesc.textContent = "Vocabulary entropy and burstiness patterns align with human authorship.";
-      probProgressFill.className = "progress-bar-fill human";
-    }
-
-    // Evidence Strength
-    if (prob >= 0.85 || prob <= 0.15) {
-      evidenceStrength.textContent = "Strong";
-    } else if (prob >= 0.65 || prob <= 0.35) {
-      evidenceStrength.textContent = "Moderate";
-    } else {
-      evidenceStrength.textContent = "Inconclusive";
-    }
-
-    confidenceDetail.textContent = `Calibrated confidence: ${det.confidence_band.replace(/_/g, " ")}`;
-
-    // Adversarial Defense Warning
-    const audit = det.tampering_report || {};
-    if (audit.adversarial_markers_present) {
-      defenseNotice.classList.remove("hidden");
-      defenseNoticeText.textContent = (
-        `Found ${audit.zero_width_count || 0} invisible unicode character(s) and ` +
-        `${audit.homoglyph_count || 0} confusable homoglyph(s). Normalized before evaluation.`
+      assessmentState.textContent = "AI-Generated Likely";
+      assessmentState.className = "verdict-state ai";
+      assessmentProbFill.className = "stat-fill ai";
+      assessmentExplanation.textContent = (
+        "Linguistic markers, transition predictability, and vocabulary entropy patterns are consistent with synthetic generation."
       );
     } else {
-      defenseNotice.classList.add("hidden");
+      assessmentState.textContent = "Human-Authored Likely";
+      assessmentState.className = "verdict-state human";
+      assessmentProbFill.className = "stat-fill human";
+      assessmentExplanation.textContent = (
+        "Burstiness variance, lexical diversity, and transition entropy align closely with organic human composition."
+      );
     }
 
-    // 4A. Sentence Heatmap
-    sentenceHeatmapBox.innerHTML = "";
-    sentenceDetailBox.classList.add("hidden");
+    assessmentConfidence.textContent = `${det.confidence_band.replace(/_/g, " ")} Confidence`;
+
+    // 2. Adversarial Tampering Alert
+    const audit = det.tampering_report || {};
+    if (audit.adversarial_markers_present) {
+      adversarialNotice.classList.remove("hidden");
+      adversarialNoticeText.textContent = (
+        `Found ${audit.zero_width_count || 0} invisible zero-width unicode character(s) and ` +
+        `${audit.homoglyph_count || 0} confusable homoglyph(s). Text was normalized prior to analysis.`
+      );
+    } else {
+      adversarialNotice.classList.add("hidden");
+    }
+
+    // 3. Sentences Heatmap
+    sentencesProseBox.innerHTML = "";
+    selectedSentenceBox.classList.add("hidden");
 
     (data.sentence_heatmap || []).forEach((s) => {
       const span = document.createElement("span");
       span.className = `heat-span ${s.suspicion_level.toLowerCase()}`;
       span.textContent = s.text + " ";
-      span.title = `Suspicion: ${s.suspicion_level} (${Math.round(s.ai_probability * 100)}%)`;
+      span.title = `Passage: ${s.suspicion_level} (${Math.round(s.ai_probability * 100)}% AI likelihood)`;
 
       span.addEventListener("click", () => {
-        sentenceDetailBox.classList.remove("hidden");
-        detailSentenceIndex.textContent = `Sentence #${s.sentence_index + 1} (${s.word_count} words)`;
-        detailSentenceProb.textContent = `${Math.round(s.ai_probability * 100)}% AI Suspicion (${s.suspicion_level})`;
-        detailSentenceText.textContent = `"${s.text}"`;
+        selectedSentenceBox.classList.remove("hidden");
+        selSentenceId.textContent = `Sentence #${s.sentence_index + 1} (${s.word_count} words)`;
+        selSentenceScore.textContent = `${Math.round(s.ai_probability * 100)}% AI Suspicion (${s.suspicion_level})`;
+        selSentenceText.textContent = `"${s.text}"`;
       });
 
-      sentenceHeatmapBox.appendChild(span);
+      sentencesProseBox.appendChild(span);
     });
 
-    // 4B. Signals Table
+    // 4. Signals Table
     signalsTableBody.innerHTML = "";
     (data.feature_attributions || []).forEach((f) => {
       const tr = document.createElement("tr");
@@ -287,40 +312,28 @@ document.addEventListener("DOMContentLoaded", () => {
       signalsTableBody.appendChild(tr);
     });
 
-    // 4C. Technical Diagnostics
-    diagnosticsList.innerHTML = "";
-    const diags = data.linguistic_diagnostics || [];
-    if (diags.length === 0) {
-      diagnosticsList.innerHTML = '<p class="sub-instruction">No anomalous structural or adversarial markers detected.</p>';
-    } else {
-      diags.forEach((d) => {
-        const item = document.createElement("div");
-        item.className = `diag-item ${d.severity.toLowerCase()}`;
-        item.innerHTML = `
-          <div class="diag-header">
-            <span>${escapeHtml(d.title)}</span>
-            <span class="badge-tag">${escapeHtml(d.severity)}</span>
-          </div>
-          <p class="diag-body">${escapeHtml(d.description)}</p>
-        `;
-        diagnosticsList.appendChild(item);
-      });
-    }
-
-    // Scroll smoothly to results
-    resultContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Show Modal
+    analysisModal.classList.remove("hidden");
   }
 
-  // =========================================================================
-  // 5. Session History
-  // =========================================================================
-  function addToHistory(data, text) {
-    const snippet = text.slice(0, 75).trim() + (text.length > 75 ? "..." : "");
-    const words = text.trim().split(/\s+/).length;
-    const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  // Close Modal Handlers
+  btnCloseAnalysis.addEventListener("click", () => analysisModal.classList.add("hidden"));
+  btnCloseReview.addEventListener("click", () => analysisModal.classList.add("hidden"));
+  analysisModal.addEventListener("click", (e) => {
+    if (e.target === analysisModal) analysisModal.classList.add("hidden");
+  });
 
-    sessionHistory.unshift({
-      timestamp,
+  // =========================================================================
+  // 7. Library Archive
+  // =========================================================================
+  function recordAnalysis(data, title, text) {
+    const snippet = text.slice(0, 80).trim() + (text.length > 80 ? "..." : "");
+    const words = text.trim().split(/\s+/).length;
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    sessionAnalyses.unshift({
+      time,
+      title,
       snippet,
       words,
       text,
@@ -328,22 +341,18 @@ document.addEventListener("DOMContentLoaded", () => {
       classification: data.detection.classification,
       probability: Math.round(data.detection.ai_probability * 100),
     });
-
-    renderHistory();
   }
 
-  function renderHistory() {
-    if (sessionHistory.length === 0) {
-      historyTableBody.innerHTML = `
-        <tr>
-          <td colspan="6" class="empty-cell">No documents analyzed yet in this session.</td>
-        </tr>
+  function renderLibrary() {
+    if (sessionAnalyses.length === 0) {
+      libraryTableBody.innerHTML = `
+        <tr><td colspan="6" class="empty-state-cell">No documents evaluated in this session yet.</td></tr>
       `;
       return;
     }
 
-    historyTableBody.innerHTML = "";
-    sessionHistory.forEach((item, index) => {
+    libraryTableBody.innerHTML = "";
+    sessionAnalyses.forEach((item, index) => {
       const tr = document.createElement("tr");
       const isAi = item.classification === "AI_GENERATED";
       const badge = isAi
@@ -351,37 +360,28 @@ document.addEventListener("DOMContentLoaded", () => {
         : '<span class="badge-tag human">Human Likely</span>';
 
       tr.innerHTML = `
-        <td><small style="color:var(--text-muted);">${item.timestamp}</small></td>
-        <td>${escapeHtml(item.snippet)}</td>
+        <td><small style="color:var(--text-muted);">${item.time}</small></td>
+        <td><strong>${escapeHtml(item.title)}</strong><br><small style="color:var(--text-muted);">${escapeHtml(item.snippet)}</small></td>
         <td>${item.words.toLocaleString()}</td>
         <td>${badge}</td>
         <td><strong>${item.probability}%</strong></td>
-        <td><button class="btn-secondary btn-reload-hist" data-index="${index}">View</button></td>
+        <td><button class="btn-action-ghost btn-lib-view" data-index="${index}">Open Review</button></td>
       `;
-      historyTableBody.appendChild(tr);
+      libraryTableBody.appendChild(tr);
     });
 
-    document.querySelectorAll(".btn-reload-hist").forEach((btn) => {
+    document.querySelectorAll(".btn-lib-view").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const item = sessionHistory[btn.dataset.index];
+        const item = sessionAnalyses[btn.dataset.index];
         if (item) {
-          inputText.value = item.text;
-          updateDocumentMetrics();
-          renderResults(item.data, item.text);
-          // Switch to analyze view
-          document.querySelector('[data-target="viewAnalyze"]').click();
+          renderAnalysisModal(item.data, item.title, item.text);
         }
       });
     });
   }
 
-  btnClearHistory.addEventListener("click", () => {
-    sessionHistory = [];
-    renderHistory();
-  });
-
   // =========================================================================
-  // 6. Export & Print
+  // 8. Export & Print
   // =========================================================================
   btnExportJson.addEventListener("click", () => {
     if (!currentAnalysis) return;
@@ -389,14 +389,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `aegistext_analysis_${Date.now()}.json`;
+    a.download = `aegistext_assessment_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   });
 
-  btnPrintReport.addEventListener("click", () => {
-    window.print();
-  });
+  btnPrintReport.addEventListener("click", () => window.print());
 
   function escapeHtml(str) {
     if (!str) return "";

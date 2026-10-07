@@ -3,414 +3,428 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AegisText — Document Intelligence & Authorship Analysis</title>
+  <title>AegisText — Start with a document</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="app-nav">
-    <div class="nav-container">
-      <div class="brand">
-        <span class="brand-name">AegisText</span>
-        <span class="brand-divider">/</span>
-        <span class="brand-label">Document Intelligence</span>
-      </div>
+  <!-- Top App Navigation -->
+  <header class="app-topbar">
+    <div class="topbar-left">
+      <!-- AegisText Logo (Four Corner Frame Mark + Wordmark) -->
+      <a href="#" class="topbar-brand">
+        <svg class="brand-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8V5a1 1 0 0 1 1-1h3"/>
+          <path d="M16 4h3a1 1 0 0 1 1 1v3"/>
+          <path d="M20 16v3a1 1 0 0 1-1 1h-3"/>
+          <path d="M8 20H5a1 1 0 0 1-1-1v-3"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span class="brand-text">AegisText</span>
+      </a>
 
-      <nav class="nav-menu" aria-label="Main Navigation">
-        <button class="nav-tab active" data-target="viewAnalyze">Analyze</button>
-        <button class="nav-tab" data-target="viewHistory">History</button>
-        <button class="nav-tab" data-target="viewResearch">Research</button>
-        <button class="nav-tab" data-target="viewSettings">Settings</button>
+      <nav class="topbar-nav">
+        <a href="#" class="topbar-nav-link active">Workspace</a>
       </nav>
+    </div>
 
-      <div class="nav-secondary">
-        <a href="/docs" target="_blank" rel="noopener" class="nav-link" title="Open API Documentation">Documentation</a>
+    <div class="topbar-right">
+      <span class="badge-demo">DEMO WORKSPACE</span>
+      <div class="workspace-dropdown" id="btnOrgDropdown">
+        <span class="workspace-name">Northfield Research</span>
+        <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </div>
+      <div class="user-avatar" title="Signed in as ML Analyst">ML</div>
     </div>
   </header>
 
-  <!-- Main Content Views -->
-  <main class="main-content">
+  <!-- App Shell Container -->
+  <div class="app-shell">
     
-    <!-- ========================================================= -->
-    <!-- VIEW 1: MAIN ANALYZER WORKSPACE -->
-    <!-- ========================================================= -->
-    <section id="viewAnalyze" class="page-view active">
-      <div class="workspace-card">
-        
-        <div class="workspace-header">
-          <div>
-            <h1 class="page-title">Analyze Document</h1>
-            <p class="page-subtitle">Paste your text or upload a document to evaluate authorship authenticity.</p>
-          </div>
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-section-title">WORKSPACE</div>
+        <nav class="sidebar-nav">
+          <button class="sidebar-item active" id="navNewAnalysis">
+            <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <span>New analysis</span>
+          </button>
 
-          <div class="workspace-actions">
-            <label class="btn-secondary" title="Upload local document (.txt, .md)">
-              <input type="file" id="fileUpload" accept=".txt,.md" style="display: none;">
-              Upload Document
-            </label>
-            <button class="btn-secondary" id="btnClearText" title="Clear text">Clear</button>
-          </div>
+          <button class="sidebar-item" id="navLibrary">
+            <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+            <span>Analysis library</span>
+          </button>
+
+          <button class="sidebar-item" id="navOrganization">
+            <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Organization</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-disclaimer">
+          <p>Fictional workspace</p>
+          <p>Illustrative product design</p>
         </div>
-
-        <!-- Sample Presets for Testing -->
-        <div class="sample-bar">
-          <span class="sample-label">Sample documents:</span>
-          <button class="sample-link" id="btnPresetHuman">Peer-Reviewed Paper (Human)</button>
-          <span class="sample-dot">•</span>
-          <button class="sample-link" id="btnPresetAi">Synthesized Paper (AI)</button>
-          <span class="sample-dot">•</span>
-          <button class="sample-link" id="btnPresetHumanized">Paraphrased with Evasion</button>
-        </div>
-
-        <!-- Document Input Area -->
-        <div class="input-area">
-          <textarea 
-            id="inputText" 
-            placeholder="Paste your document text here..." 
-            spellcheck="false" 
-            rows="12"
-          ></textarea>
-        </div>
-
-        <!-- Document Toolbar & Actions -->
-        <div class="workspace-footer">
-          <div class="footer-meta">
-            <span class="meta-item"><strong id="wordCountLabel">0</strong> words</span>
-            <span class="meta-sep">•</span>
-            <span class="meta-item"><strong id="charCountLabel">0</strong> characters</span>
-            <span class="meta-sep">•</span>
-            <span class="meta-item"><strong id="readTimeLabel">0</strong> min read</span>
-          </div>
-
-          <div class="footer-controls">
-            <label class="setting-toggle" title="Sanitizes zero-width unicode spaces and homoglyph substitutions before analysis">
-              <input type="checkbox" id="toggleSanitize" checked>
-              <span>Adversarial defense</span>
-            </label>
-
-            <button id="btnAnalyze" class="btn-primary">
-              <span id="btnAnalyzeText">Analyze Document</span>
-            </button>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Result Container (Only shown after analysis) -->
-      <section id="resultContainer" class="result-section hidden">
+      <div class="sidebar-bottom">
+        <a href="#guide" class="guide-link" id="btnOpenGuide">
+          <svg class="guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="guide-label">Assessment guide</span>
+        </a>
+        <p class="guide-tagline">Evidence, not a verdict.</p>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="app-main">
+      
+      <!-- VIEW: Start with a document (Exact Figma Layout) -->
+      <section id="viewNewAnalysis" class="workspace-page active">
         
-        <!-- Primary Assessment Card -->
-        <div class="result-card" id="primaryAssessmentCard">
-          <div class="result-card-header">
-            <h2 class="section-title">Assessment</h2>
-            <span class="latency-tag" id="latencyTag">18 ms</span>
-          </div>
-
-          <div class="assessment-grid">
-            <div class="assessment-item">
-              <span class="item-label">Classification</span>
-              <div class="verdict-title" id="verdictTitle">AI-Generated Likely</div>
-              <p class="verdict-desc" id="verdictDesc">Linguistic and structural patterns indicate machine generation.</p>
-            </div>
-
-            <div class="assessment-item">
-              <span class="item-label">AI Probability</span>
-              <div class="prob-number" id="probNumber">78%</div>
-              <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="probProgressFill" style="width: 78%;"></div>
-              </div>
-            </div>
-
-            <div class="assessment-item">
-              <span class="item-label">Evidence Strength</span>
-              <div class="evidence-strength" id="evidenceStrength">Moderate</div>
-              <span class="confidence-detail" id="confidenceDetail">Calibrated posterior probability</span>
-            </div>
-          </div>
-
-          <!-- Adversarial Evasion Notice (Conditional) -->
-          <div class="defense-notice hidden" id="defenseNotice">
-            <strong>Adversarial evasion markers detected:</strong>
-            <span id="defenseNoticeText">Found invisible zero-width unicode characters. Text was normalized prior to analysis.</span>
-          </div>
+        <!-- Header Group -->
+        <div class="page-heading-group">
+          <div class="kicker-label">NEW ANALYSIS</div>
+          <h1 class="page-title">Start with a document</h1>
+          <p class="page-lead">Explore authorship signals in context. Keep the final judgment human.</p>
         </div>
 
-        <!-- Progressive Disclosure: Expandable Detailed Analysis -->
-        <div class="disclosure-group">
-          
-          <!-- Section A: Sentence-Level Analysis -->
-          <details class="disclosure-card" open>
-            <summary class="disclosure-header">
-              <span class="disclosure-title">Sentence-Level Analysis</span>
-              <span class="disclosure-hint">Per-sentence probability distribution</span>
-            </summary>
-            <div class="disclosure-content">
-              <p class="sub-instruction">Click any sentence to inspect specific suspicion drivers.</p>
-              
-              <div class="sentence-heatmap" id="sentenceHeatmapBox"></div>
+        <!-- Mode Tabs -->
+        <div class="doc-tabs-bar">
+          <button class="doc-tab active" id="tabUpload">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Upload document</span>
+          </button>
 
-              <div class="sentence-detail-box hidden" id="sentenceDetailBox">
-                <div class="detail-top">
-                  <span class="detail-label" id="detailSentenceIndex">Sentence #1</span>
-                  <span class="detail-prob" id="detailSentenceProb">88% AI</span>
+          <button class="doc-tab" id="tabPaste">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <path d="M9 12h6"/>
+              <path d="M9 16h6"/>
+            </svg>
+            <span>Paste text</span>
+          </button>
+        </div>
+
+        <!-- Document Input Columns -->
+        <div class="input-columns-grid">
+          
+          <!-- Left Column: Dropzone Container -->
+          <div class="dropzone-column">
+            <div class="dropzone-box" id="dropzoneArea">
+              <input type="file" id="fileInput" accept=".txt,.md,.pdf,.docx" style="display: none;">
+              
+              <div class="dropzone-icon-wrap">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <polyline points="9 15 12 12 15 15"/>
+                </svg>
+              </div>
+
+              <h2 class="dropzone-heading">Drop a document here</h2>
+              <p class="dropzone-sub">or select a file from your computer</p>
+
+              <button class="btn-choose-file" id="btnChooseFile">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span>Choose document</span>
+              </button>
+
+              <span class="file-format-hint">PDF, DOCX or TXT · Up to 20 MB</span>
+            </div>
+
+            <p class="dropzone-footnote">
+              Use text-based files. Scanned PDFs may need text extraction first. You'll review the extracted text before analysis.
+            </p>
+          </div>
+
+          <!-- Right Column: Excerpt Textarea Container -->
+          <div class="excerpt-column">
+            <h3 class="excerpt-heading">Working with an excerpt?</h3>
+            <p class="excerpt-lead">
+              Paste a passage or a full document. More context can make the evidence easier to interpret.
+            </p>
+
+            <div class="excerpt-card">
+              <textarea 
+                id="excerptTextarea" 
+                placeholder="Paste your text here..." 
+                spellcheck="false"
+              ></textarea>
+            </div>
+
+            <!-- Excerpt Card Footer -->
+            <div class="excerpt-footer">
+              <span class="word-limit-label" id="wordCountNotice">0 words · Minimum 150 words</span>
+              <button class="btn-review-text" id="btnReviewText">Review text</button>
+            </div>
+
+            <!-- Quick Preset Samples for Testing -->
+            <div class="preset-links-row">
+              <span class="preset-label">Load sample:</span>
+              <button class="btn-preset-link" id="presetAcademic">Academic human</button>
+              <span class="preset-sep">·</span>
+              <button class="btn-preset-link" id="presetSynthetic">AI generated</button>
+              <span class="preset-sep">·</span>
+              <button class="btn-preset-link" id="presetHumanized">Adversarial evasion</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Guidance & Review Principles Row -->
+        <div class="guidance-columns-row">
+          
+          <!-- Left Column: 3 Steps Principle -->
+          <div class="principles-col">
+            <h3 class="principles-heading">A considered review, not a verdict</h3>
+
+            <div class="steps-list">
+              <div class="step-item">
+                <span class="step-num">01</span>
+                <div class="step-content">
+                  <strong class="step-title">Prepare</strong>
+                  <p class="step-desc">Review the document and choose what to include.</p>
                 </div>
-                <blockquote class="detail-text" id="detailSentenceText"></blockquote>
+              </div>
+
+              <div class="step-item">
+                <span class="step-num">02</span>
+                <div class="step-content">
+                  <strong class="step-title">Assess</strong>
+                  <p class="step-desc">Read the overall assessment alongside its uncertainty.</p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <span class="step-num">03</span>
+                <div class="step-content">
+                  <strong class="step-title">Understand</strong>
+                  <p class="step-desc">Explore passages, alternative explanations and limits.</p>
+                </div>
               </div>
             </div>
-          </details>
+          </div>
 
-          <!-- Section B: Linguistic Indicators & Signals -->
-          <details class="disclosure-card">
-            <summary class="disclosure-header">
-              <span class="disclosure-title">Signal Analysis</span>
-              <span class="disclosure-hint">Feature attributions & indicators</span>
-            </summary>
-            <div class="disclosure-content">
-              <div class="table-container">
-                <table class="data-table">
+          <!-- Right Column: Assessment Guidance Card -->
+          <div class="disclaimer-col">
+            <div class="guidance-card">
+              <div class="guidance-card-header">
+                <svg class="info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <h4 class="guidance-card-title">Authorship assessment cannot prove authorship</h4>
+              </div>
+              <p class="guidance-card-body">
+                Use results as one source of evidence, never as the sole basis for academic or employment decisions. Discuss context and drafting practices with the author.
+              </p>
+            </div>
+
+            <p class="disclaimer-notice">
+              Only upload material you have permission to review. Organization privacy and retention preferences apply to this workspace.
+            </p>
+
+            <div class="disclaimer-links">
+              <a href="#privacy" class="disclaimer-link" id="linkPrivacy">Privacy preferences ↗</a>
+              <a href="#limitations" class="disclaimer-link" id="linkLimitations">Assessment limitations ↗</a>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- MODAL / DRAWER: Analysis Review & Considered Assessment -->
+      <div class="review-modal-backdrop hidden" id="analysisModal">
+        <div class="review-modal-container">
+          
+          <div class="review-modal-header">
+            <div>
+              <span class="review-kicker">ANALYSIS ASSESSMENT</span>
+              <h2 class="review-modal-title" id="reviewDocTitle">Document Authorship Signals</h2>
+            </div>
+            <button class="btn-modal-close" id="btnCloseAnalysis" title="Close review">&times;</button>
+          </div>
+
+          <div class="review-modal-body">
+            
+            <!-- Assessment Overview Row -->
+            <div class="assessment-verdict-card" id="verdictCard">
+              <div class="verdict-col">
+                <span class="verdict-label">Overall Assessment</span>
+                <div class="verdict-state" id="assessmentState">AI-Generated Likely</div>
+                <p class="verdict-explanation" id="assessmentExplanation">
+                  Linguistic indicators, transition predictability, and vocabulary entropy patterns are consistent with synthetic generation.
+                </p>
+              </div>
+
+              <div class="verdict-stats-col">
+                <div class="stat-cell">
+                  <span class="stat-name">AI Probability</span>
+                  <div class="stat-val" id="assessmentProb">78%</div>
+                  <div class="stat-track"><div class="stat-fill" id="assessmentProbFill" style="width: 78%;"></div></div>
+                </div>
+                <div class="stat-cell">
+                  <span class="stat-name">Evidence Strength</span>
+                  <div class="stat-val-sm" id="assessmentConfidence">Moderate Confidence</div>
+                  <span class="stat-meta" id="assessmentLatency">Latency: 18 ms</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Adversarial Alert Notice if applicable -->
+            <div class="adversarial-banner hidden" id="adversarialNotice">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div>
+                <strong>Adversarial Evasion Normalization:</strong>
+                <span id="adversarialNoticeText">Normalized hidden unicode spaces before feature extraction.</span>
+              </div>
+            </div>
+
+            <!-- Per-Sentence Heatmap Explorer -->
+            <div class="passage-explorer-section">
+              <h3 class="section-subhead">Explore passages in context</h3>
+              <p class="section-instruction">Click any passage to inspect sentence-level authorship uncertainty.</p>
+              
+              <div class="sentences-prose-container" id="sentencesProseBox"></div>
+
+              <div class="selected-sentence-box hidden" id="selectedSentenceBox">
+                <div class="box-top">
+                  <span class="box-id" id="selSentenceId">Sentence #1</span>
+                  <span class="box-score" id="selSentenceScore">82% AI Suspicion</span>
+                </div>
+                <blockquote class="box-text" id="selSentenceText"></blockquote>
+              </div>
+            </div>
+
+            <!-- Linguistic Signals Table -->
+            <div class="signals-section">
+              <h3 class="section-subhead">Authorship signals</h3>
+              <div class="signals-table-wrap">
+                <table class="signals-table">
                   <thead>
                     <tr>
                       <th>Linguistic Signal</th>
                       <th>Observed Value</th>
-                      <th>Direction</th>
-                      <th>Impact Weight</th>
+                      <th>Attribution</th>
+                      <th>Model Impact</th>
                     </tr>
                   </thead>
                   <tbody id="signalsTableBody"></tbody>
                 </table>
               </div>
             </div>
-          </details>
 
-          <!-- Section C: Diagnostics & Forensic Logs -->
-          <details class="disclosure-card">
-            <summary class="disclosure-header">
-              <span class="disclosure-title">Technical Diagnostics</span>
-              <span class="disclosure-hint">Model outputs & tampering audits</span>
-            </summary>
-            <div class="disclosure-content">
-              <div id="diagnosticsList" class="diagnostics-list"></div>
-            </div>
-          </details>
-
-        </div>
-
-        <!-- Result Actions -->
-        <div class="result-actions">
-          <button class="btn-secondary" id="btnExportJson">Export Audit JSON</button>
-          <button class="btn-secondary" id="btnPrintReport">Print Summary</button>
-        </div>
-
-      </section>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- VIEW 2: HISTORY VIEW -->
-    <!-- ========================================================= -->
-    <section id="viewHistory" class="page-view hidden">
-      <div class="workspace-card">
-        <div class="workspace-header">
-          <div>
-            <h1 class="page-title">Analysis History</h1>
-            <p class="page-subtitle">Recent document analyses conducted in this session.</p>
           </div>
-          <button class="btn-secondary" id="btnClearHistory">Clear History</button>
+
+          <div class="review-modal-footer">
+            <button class="btn-action-ghost" id="btnExportJson">Export Audit JSON</button>
+            <button class="btn-action-ghost" id="btnPrintReport">Print Summary</button>
+            <button class="btn-action-primary" id="btnCloseReview">Done</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW: Analysis Library (Sidebar link) -->
+      <section id="viewLibrary" class="workspace-page hidden">
+        <div class="page-heading-group">
+          <div class="kicker-label">WORKSPACE ARCHIVE</div>
+          <h1 class="page-title">Analysis library</h1>
+          <p class="page-lead">History of documents analyzed within Northfield Research.</p>
         </div>
 
-        <div class="table-container">
-          <table class="data-table">
+        <div class="library-table-card">
+          <table class="signals-table">
             <thead>
               <tr>
-                <th>Timestamp</th>
-                <th>Sample Snippet</th>
+                <th>Analyzed</th>
+                <th>Excerpt</th>
                 <th>Words</th>
-                <th>Verdict</th>
-                <th>Probability</th>
-                <th>Action</th>
+                <th>Assessment</th>
+                <th>AI Probability</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="historyTableBody">
+            <tbody id="libraryTableBody">
               <tr>
-                <td colspan="6" class="empty-cell">No documents analyzed yet in this session.</td>
+                <td colspan="6" class="empty-state-cell">No documents evaluated in this session yet.</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ========================================================= -->
-    <!-- VIEW 3: RESEARCH & BENCHMARKS -->
-    <!-- ========================================================= -->
-    <section id="viewResearch" class="page-view hidden">
-      <div class="workspace-card">
-        <div class="workspace-header">
-          <div>
-            <h1 class="page-title">Research & Methodology</h1>
-            <p class="page-subtitle">Empirical validation, dataset distributions, and architectural specifications.</p>
-          </div>
+      <!-- VIEW: Organization Settings (Sidebar link) -->
+      <section id="viewOrganization" class="workspace-page hidden">
+        <div class="page-heading-group">
+          <div class="kicker-label">ORGANIZATION PREFERENCES</div>
+          <h1 class="page-title">Organization settings</h1>
+          <p class="page-lead">Policies, retention schedules, and detection parameters for Northfield Research.</p>
         </div>
 
-        <div class="research-section">
-          <h2 class="subhead">Empirical Evaluation Results</h2>
-          <p class="body-text">Evaluated on a held-out test split of 419 multi-domain documents spanning academic literature, journalism, creative writing, and formal discourse.</p>
-
-          <div class="metrics-row">
-            <div class="metric-block">
-              <span class="metric-num">0.9959</span>
-              <span class="metric-name">ROC-AUC</span>
-            </div>
-            <div class="metric-block">
-              <span class="metric-num">0.0714</span>
-              <span class="metric-name">FPR @ 95% TPR</span>
-            </div>
-            <div class="metric-block">
-              <span class="metric-num">0.0650</span>
-              <span class="metric-name">Calibration ECE</span>
-            </div>
-            <div class="metric-block">
-              <span class="metric-num">0.9980</span>
-              <span class="metric-name">Humanized AUROC</span>
-            </div>
-          </div>
-
-          <h3 class="subhead">Model Comparison</h3>
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Model</th>
-                  <th>ROC-AUC</th>
-                  <th>PR-AUC</th>
-                  <th>F1 Score</th>
-                  <th>Accuracy</th>
-                  <th>Calibration ECE</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Logistic Regression (Baseline)</td>
-                  <td>0.9949</td>
-                  <td>0.9963</td>
-                  <td>0.9565</td>
-                  <td>95.24%</td>
-                  <td>0.0393</td>
-                </tr>
-                <tr>
-                  <td>Random Forest (Ensemble)</td>
-                  <td>0.9990</td>
-                  <td>0.9992</td>
-                  <td>0.9859</td>
-                  <td>98.41%</td>
-                  <td>0.1316</td>
-                </tr>
-                <tr class="highlight-row">
-                  <td><strong>AegisText Calibrated Ensemble</strong></td>
-                  <td><strong>0.9959</strong></td>
-                  <td><strong>0.9969</strong></td>
-                  <td><strong>0.9429</strong></td>
-                  <td><strong>93.65%</strong></td>
-                  <td><strong>0.0650</strong></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3 class="subhead mt-4">Adversarial Resilience</h3>
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Evasion Vector</th>
-                  <th>Mechanism</th>
-                  <th>Defense Verification</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Zero-Width Spaces (<code>\u200b</code>, <code>\u200c</code>)</td>
-                  <td>Subword tokenization fragmentation</td>
-                  <td>Sanitized via regex normalization</td>
-                </tr>
-                <tr>
-                  <td>Cyrillic & Greek Homoglyphs</td>
-                  <td>Visual character substitution</td>
-                  <td>Canonicalized to Latin code points</td>
-                </tr>
-                <tr>
-                  <td>Commercial Humanizer Paraphrasing</td>
-                  <td>Lexical substitution and restructuring</td>
-                  <td>Robust to stylometric shifts</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3 class="subhead mt-4">System Architecture</h3>
-          <p class="body-text">
-            AegisText combines an 84-dimensional linguistic feature extraction pipeline with an isotonic-calibrated ensemble classifier. Features encompass:
-          </p>
-          <ul class="feature-bullets">
-            <li><strong>Stylometry:</strong> Type-token ratio, Shannon vocabulary entropy, punctuation rhythm, hapax legomena ratio.</li>
-            <li><strong>Structural Discourse:</strong> Sentence length variance, discourse transition marker density, paragraph structural coherence.</li>
-            <li><strong>Predictability & Burstiness:</strong> Frequency rank zipfian slope, lexical repetition cycles, burstiness distribution.</li>
-            <li><strong>Semantic Flow:</strong> Consecutive sentence Jaccard similarity and cross-sentence semantic drift.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- VIEW 4: SETTINGS VIEW -->
-    <!-- ========================================================= -->
-    <section id="viewSettings" class="page-view hidden">
-      <div class="workspace-card">
-        <div class="workspace-header">
-          <div>
-            <h1 class="page-title">Settings</h1>
-            <p class="page-subtitle">Configure analysis preferences and system defaults.</p>
-          </div>
-        </div>
-
-        <div class="settings-content">
-          <div class="setting-row">
+        <div class="org-settings-card">
+          <div class="org-setting-row">
             <div>
-              <strong class="setting-title">Adversarial Sanitization</strong>
-              <p class="setting-desc">Automatically normalize confusable homoglyphs and remove invisible zero-width characters prior to feature extraction.</p>
+              <strong>Organization Name</strong>
+              <p class="setting-desc">Primary workspace label displayed across audit certificates.</p>
             </div>
-            <label class="setting-toggle">
-              <input type="checkbox" id="settingDefaultSanitize" checked>
+            <span class="setting-val-tag">Northfield Research</span>
+          </div>
+
+          <div class="org-setting-row">
+            <div>
+              <strong>Adversarial Defense Shield</strong>
+              <p class="setting-desc">Automatically normalize confusable Cyrillic homoglyphs and strip zero-width characters.</p>
+            </div>
+            <label class="toggle-control">
+              <input type="checkbox" id="toggleShield" checked>
               <span>Enabled</span>
             </label>
           </div>
 
-          <div class="setting-row">
+          <div class="org-setting-row">
             <div>
-              <strong class="setting-title">Decision Threshold</strong>
-              <p class="setting-desc">Posterior probability threshold for classifying a document as AI-generated (default: 0.50).</p>
+              <strong>Posterior Decision Threshold</strong>
+              <p class="setting-desc">Calibrated threshold for classifying as AI-Generated (default: 0.50).</p>
             </div>
-            <div class="setting-input-wrap">
-              <input type="number" id="settingThreshold" min="0.10" max="0.90" step="0.05" value="0.50" class="num-input">
-            </div>
-          </div>
-
-          <div class="setting-row">
-            <div>
-              <strong class="setting-title">API Connection</strong>
-              <p class="setting-desc">Local inference server endpoint.</p>
-            </div>
-            <code class="code-pill">/api/v1/explain</code>
+            <span class="setting-val-tag">0.50 (Calibrated)</span>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-  </main>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
