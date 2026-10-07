@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'web/**'
+      - 'wrangler.toml'
+      - '.github/workflows/cloudflare-pages.yml'
   workflow_dispatch:
 
 jobs:
@@ -16,11 +20,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Check Cloudflare Credentials
+        id: check_credentials
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "has_token=false" >> $GITHUB_OUTPUT
+            echo "::warning title=Missing Secret::CLOUDFLARE_API_TOKEN is not configured in repository secrets. Skipping deployment step."
+          else
+            echo "has_token=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        if: steps.check_credentials.outputs.has_token == 'true'
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: aegistext
-          directory: web
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy web --project-name=aegistext
