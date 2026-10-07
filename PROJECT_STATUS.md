@@ -4,19 +4,25 @@
 ---
 
 ## 1. Current Phase
-- **Phase 11 — UI Reset & Design Freeze (Awaiting Final Figma Specifications)**
+- **Phase 12 — Exact Figma Landing Page Implemented & Deployed**
 
 ---
 
 ## 2. Completed Phases
-- **Phase 11 — UI Reset & Design Freeze Prepared for Figma**
-  - Completely stripped AI-startup/cybersecurity aesthetic (neon borders, gradients, dark glowing dials, grid backgrounds, unverified marketing badges).
-  - Adopted a clean, calm, neutral enterprise document intelligence workspace.
-  - Prioritized the core action flow: Paste/Upload Document -> Analyze -> Understand Simple Assessment.
-  - Introduced clean progressive disclosure for detailed sentence heatmaps, linguistic signals, and diagnostics.
-  - Separated advanced research metrics, model architecture, and benchmarks into a dedicated `Research` view.
-  - Eliminated horizontal scroll overflow completely across all viewport widths (390px to 1920px).
-  - Pushed to GitHub repository (`aakash1552005/aegistext`), ready for screenshot-driven Figma reproduction.
+- **Phase 12 — Exact Figma Landing Page Reproduction**
+  - Reproduced the Figma design specification pixel-for-pixel:
+    - Top header: AegisText glyph + wordmark, `Workspace`, `DEMO WORKSPACE` tag, `Northfield Research` dropdown, and `ML` user avatar.
+    - Left sidebar: `WORKSPACE`, `New analysis` (active sage pill), `Analysis library`, `Organization`, disclaimer note, and bottom `Assessment guide` ("Evidence, not a verdict.").
+    - Document Workspace: `NEW ANALYSIS` kicker, `Start with a document` title, `Explore authorship signals in context. Keep the final judgment human.` lead text.
+    - Mode tabs: `Upload document` (with active forest green underline) and `Paste text`.
+    - Input columns:
+      - Left: Dashed dropzone with document icon, `Drop a document here`, `or select a file from your computer`, `Choose document` (forest green button), file format notes.
+      - Right: `Working with an excerpt?`, textarea (`Paste your text here...`), word limit indicator, `Review text` button, and preset loaders.
+    - Bottom row:
+      - Left: `A considered review, not a verdict` with 01 Prepare, 02 Assess, 03 Understand.
+      - Right: `Authorship assessment cannot prove authorship` callout card with privacy and limitations links.
+    - Modal review dialog: Considered Assessment modal connected to real `/api/v1/explain` inference pipeline with sentence heatmap and signals table.
+
 
 - **Phase 0 — Repository, Runtime & Environment Setup**
   - Python 3.11.9 (64-bit) installed and configured in dedicated `.venv`.
