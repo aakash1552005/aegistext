@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Data & Models (large files)
+datasets/raw/*
+!datasets/raw/.gitkeep
+models/checkpoints/*
+!models/checkpoints/.gitkeep
+*.h5
+*.pt
+*.bin
+*.onnx
+*.safetensors
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# DVC
+/storage/
+
+# Node
+node_modules/
+.next/
+out/
+
+# Reports
+*.pdf
+
+# Logs
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docker
+docker-compose.override.yml

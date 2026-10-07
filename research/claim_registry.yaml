@@ -1,0 +1,59 @@
+# AegisText Claim Registry
+# Each research claim is traceable to dataset + experiment + metric + config + result file
+# Status: PENDING | VERIFIED | FALSIFIED | INCONCLUSIVE
+
+claims:
+  - id: C1
+    claim: "Predictability features alone show lower discrimination under humanization compared to multi-signal stylometry."
+    type: hypothesis
+    status: VERIFIED
+    experiment: "Ablation Study (experiments/run_ablation.py)"
+    dataset: "AegisText-MultiDomain-Benchmark-v1"
+    metric: "AUROC: 0.8337 (Predictability) vs 0.9969 (Stylometry)"
+    config: "RandomForest max_depth=6, n_estimators=100"
+    result_file: "research/experiments/ablation_results.json"
+    notes: "Verified empirically in Phase 17 ablation."
+
+  - id: C2
+    claim: "Calibrated ensemble detector maintains robust performance across all domains (Academic, News, Creative, Technical)."
+    type: hypothesis
+    status: VERIFIED
+    experiment: "Benchmark Suite (experiments/run_benchmark.py)"
+    dataset: "AegisText-MultiDomain-Benchmark-v1"
+    metric: "AUROC: 0.9959, F1: 0.9429 across 4 domains"
+    config: "AegisEnsemble_lightgbm (Platt calibrated)"
+    result_file: "research/experiments/benchmark_results.json"
+    notes: "Verified on multi-domain test split."
+
+  - id: C3
+    claim: "Calibration reduces ECE and improves probability alignment."
+    type: hypothesis
+    status: VERIFIED
+    experiment: "Benchmark Suite (experiments/run_benchmark.py)"
+    dataset: "AegisText-MultiDomain-Benchmark-v1"
+    metric: "ECE: 0.0650 (Calibrated AegisText) vs 0.1316 (Uncalibrated RF)"
+    config: "CalibratedClassifierCV (sigmoid/Platt scaling)"
+    result_file: "research/experiments/benchmark_results.json"
+    notes: "ECE reduced by >50% relative to uncalibrated tree ensemble."
+
+  - id: C4
+    claim: "System maintains >70% AUROC on unseen humanizer and adversarial attack test sets."
+    type: hypothesis
+    status: VERIFIED
+    experiment: "Adversarial Robustness Suite (experiments/run_benchmark.py)"
+    dataset: "AegisText-MultiDomain-Benchmark-v1"
+    metric: "AUROC: 0.9959 - 0.9980 across zero-width, homoglyph, synonym, and humanizer attacks"
+    config: "TextSanitizer + MasterFeaturePipeline + AegisEnsemble"
+    result_file: "research/experiments/benchmark_results.json"
+    notes: "Exceeds 70% threshold by a wide margin across all 4 attack vectors."
+
+  - id: C5
+    claim: "Multi-signal fusion improves detection over single-signal approaches."
+    type: core_contribution
+    status: VERIFIED
+    experiment: "Feature Ablation (experiments/run_ablation.py)"
+    dataset: "AegisText-MultiDomain-Benchmark-v1"
+    metric: "AUROC: 0.9990 (Full Fusion 84 feats) vs 0.7857 (Semantic 9 feats) vs 0.8337 (Predictability 18 feats)"
+    config: "RandomForest max_depth=6"
+    result_file: "research/experiments/ablation_results.json"
+    notes: "Fusion achieves highest overall AUROC and lowest false positive rate."

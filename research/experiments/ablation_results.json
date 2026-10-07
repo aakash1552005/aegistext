@@ -1,0 +1,42 @@
+{
+  "Stylometry_Only": {
+    "num_features": 33,
+    "roc_auc": 0.9969,
+    "pr_auc": 0.9975,
+    "f1_binary": 0.9859,
+    "accuracy": 0.9841,
+    "ece": 0.1116
+  },
+  "Structural_Only": {
+    "num_features": 24,
+    "roc_auc": 0.9184,
+    "pr_auc": 0.9496,
+    "f1_binary": 0.7945,
+    "accuracy": 0.7619,
+    "ece": 0.1643
+  },
+  "Predictability_Only": {
+    "num_features": 18,
+    "roc_auc": 0.8337,
+    "pr_auc": 0.8334,
+    "f1_binary": 0.8205,
+    "accuracy": 0.7778,
+    "ece": 0.1478
+  },
+  "Semantic_Only": {
+    "num_features": 9,
+    "roc_auc": 0.7857,
+    "pr_auc": 0.7983,
+    "f1_binary": 0.7895,
+    "accuracy": 0.746,
+    "ece": 0.1335
+  },
+  "Full_MultiSignal_Fusion": {
+    "num_features": 84,
+    "roc_auc": 0.999,
+    "pr_auc": 0.9992,
+    "f1_binary": 0.9859,
+    "accuracy": 0.9841,
+    "ece": 0.1316
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "dataset_name": "AegisText-MultiDomain-Benchmark-v1",
+  "total_samples": 419,
+  "train_samples": 293,
+  "val_samples": 63,
+  "test_samples": 63,
+  "dedup_metadata": {
+    "initial_count": 480,
+    "exact_duplicates_removed": 61,
+    "final_count": 419
+  },
+  "origins": {
+    "HUMAN": 158,
+    "AI_RAW": 157,
+    "AI_HUMANIZED": 104
+  },
+  "domains": {
+    "ACADEMIC": 101,
+    "NEWS": 105,
+    "CREATIVE": 105,
+    "TECHNICAL": 108
+  }
+}
