@@ -37,6 +37,13 @@ ZERO_WIDTH_CHARS = {
     '\u200f': 'RIGHT_TO_LEFT_MARK',
 }
 
+# High-performance compiled regexes and translation tables
+ZERO_WIDTH_REGEX = re.compile(r'[\u200b\u200c\u200d\u2060\ufeff\u00ad\u200e\u200f]')
+HOMOGLYPH_TRANSLATION_TABLE = str.maketrans(HOMOGLYPH_MAP)
+HORIZONTAL_SPACE_REGEX = re.compile(r'[ \t]+')
+PARAGRAPH_BREAK_REGEX = re.compile(r'\n{3,}')
+
+
 
 class TextSanitizer:
     """Sanitizes text and inspects it for adversarial character-level tampering."""
@@ -93,22 +100,20 @@ class TextSanitizer:
         report = self.inspect_adversarial_artifacts(text)
         cleaned = text
 
-        # 1. Remove zero-width characters
+        # 1. Remove zero-width characters (single-pass regex)
         if self.strip_zero_width and report["zero_width_count"] > 0:
-            for char in ZERO_WIDTH_CHARS:
-                cleaned = cleaned.replace(char, "")
+            cleaned = ZERO_WIDTH_REGEX.sub("", cleaned)
 
-        # 2. Normalize homoglyphs
+        # 2. Normalize homoglyphs (C-level single-pass character translation table)
         if self.strip_homoglyphs and report["homoglyph_count"] > 0:
-            for bad_char, good_char in HOMOGLYPH_MAP.items():
-                cleaned = cleaned.replace(bad_char, good_char)
+            cleaned = cleaned.translate(HOMOGLYPH_TRANSLATION_TABLE)
 
         # 3. Unicode normalization (NFKC decomposes compatibility chars and canonicalizes)
         cleaned = unicodedata.normalize('NFKC', cleaned)
 
         # 4. Normalize multiple whitespaces except single paragraph linebreaks
-        cleaned = re.sub(r'[ \t]+', ' ', cleaned)
-        cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)
+        cleaned = HORIZONTAL_SPACE_REGEX.sub(' ', cleaned)
+        cleaned = PARAGRAPH_BREAK_REGEX.sub('\n\n', cleaned)
         cleaned = cleaned.strip()
 
         return cleaned, report

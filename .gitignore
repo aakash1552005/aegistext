@@ -63,3 +63,5 @@ logs/
 # Docker
 docker-compose.override.yml
 .coverage
+.pytest_cache/
+

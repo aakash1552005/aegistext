@@ -2,5 +2,12 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: document-domain=(), microphone=(), camera=()
+  Permissions-Policy: document-domain=(), microphone=(), camera=(), geolocation=()
   Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=0, must-revalidate
+
+/styles.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/app.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

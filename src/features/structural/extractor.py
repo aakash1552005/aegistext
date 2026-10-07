@@ -32,13 +32,18 @@ ALL_TRANSITIONS = (
 )
 
 
+SENTENCE_SPLIT_PATTERN = re.compile(r'(?<=[.!?])\s+')
+PARAGRAPH_SPLIT_PATTERN = re.compile(r'\n\s*\n')
+MARKDOWN_HEADING_PATTERN = re.compile(r'^#{1,6}\s+')
+
+
 def _split_sentences(text: str) -> List[str]:
-    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    sentences = SENTENCE_SPLIT_PATTERN.split(text.strip())
     return [s.strip() for s in sentences if s.strip()]
 
 
 def _split_paragraphs(text: str) -> List[str]:
-    paragraphs = re.split(r'\n\s*\n', text.strip())
+    paragraphs = PARAGRAPH_SPLIT_PATTERN.split(text.strip())
     return [p.strip() for p in paragraphs if p.strip()]
 
 
@@ -50,7 +55,7 @@ def _detect_headings(text: str) -> List[str]:
         if not line:
             continue
         # Markdown heading
-        if re.match(r'^#{1,6}\s+', line):
+        if MARKDOWN_HEADING_PATTERN.match(line):
             headings.append(line)
         # Short all-caps lines (potential headings)
         elif len(line) < 80 and line.isupper() and len(line.split()) < 10:

@@ -15,14 +15,22 @@ import time
 from typing import List, Dict, Any, Optional
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from src.features.pipeline import MasterFeaturePipeline
 from src.models.tabular_ensemble import AegisEnsembleDetector
 from src.preprocessing.normalizer import TextSanitizer
 from src.explainability.explainer import AegisExplainer
+
+# Locate web asset directory
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+web_dir = os.path.join(project_root, "web")
+if not os.path.exists(web_dir):
+    web_dir = "web"
 
 # Global resources initialized on startup
 pipeline: Optional[MasterFeaturePipeline] = None
@@ -41,7 +49,6 @@ def init_resources():
     if explainer is None:
         explainer = AegisExplainer(pipeline)
     if detector is None or not detector.is_fitted:
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         model_path = os.path.join(project_root, "artifacts", "checkpoints", "aegistext_ensemble.joblib")
         if not os.path.exists(model_path):
             model_path = os.path.join(project_root, "models", "checkpoints", "aegistext_ensemble.joblib")
@@ -78,10 +85,22 @@ app.add_middleware(
 )
 
 
+# Security Headers Middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response: Response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    return response
+
+
 # --- Request & Response Models ---
 
 class TextDetectionRequest(BaseModel):
-    text: str = Field(..., min_length=10, description="The input text sample to analyze")
+    text: str = Field(..., min_length=10, max_length=250000, description="The input text sample to analyze (up to 250,000 characters)")
     sanitize_adversarial: bool = Field(True, description="Whether to sanitize homoglyphs and hidden unicode")
 
 
@@ -114,15 +133,12 @@ class BatchDetectionResponse(BaseModel):
 
 
 class SanitizeRequest(BaseModel):
-    text: str = Field(..., min_length=1)
+    text: str = Field(..., min_length=1, max_length=250000)
 
 
 class SanitizeResponse(BaseModel):
     sanitized_text: str
     tampering_audit: Dict[str, Any]
-
-
-from fastapi.responses import FileResponse
 
 
 @app.get("/")
@@ -207,7 +223,7 @@ def detect_text(payload: TextDetectionRequest):
 
 @app.post("/api/v1/explain", response_model=ExplanationResponse)
 def explain_text(payload: TextDetectionRequest):
-    if not detector or not detector.is_fitted or not explainer or not sanitizer:
+    if not detector or not detector.is_fitted or not explainer or not sanitizer or not pipeline:
         raise HTTPException(status_code=503, detail="Detector model is not currently ready.")
 
     t0 = time.perf_counter()
@@ -260,6 +276,8 @@ def batch_detect(payload: BatchDetectionRequest):
     results = []
 
     for t in payload.texts:
+        if len(t) < 10:
+            continue
         sub_req = TextDetectionRequest(text=t, sanitize_adversarial=True)
         results.append(detect_text(sub_req))
 
@@ -273,7 +291,6 @@ def batch_detect(payload: BatchDetectionRequest):
 
 @app.get("/api/v1/metrics")
 def get_benchmarks():
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     results_path = os.path.join(project_root, "research", "experiments", "benchmark_results.json")
     if os.path.exists(results_path):
         with open(results_path, "r", encoding="utf-8") as f:
@@ -282,12 +299,5 @@ def get_benchmarks():
 
 
 # Mount Static Web UI
-from fastapi.staticfiles import StaticFiles
-
-web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "web")
-if not os.path.exists(web_dir):
-    web_dir = "web"
-
 if os.path.exists(web_dir):
     app.mount("/", StaticFiles(directory=web_dir, html=True), name="web")
-

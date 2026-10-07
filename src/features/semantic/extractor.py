@@ -14,6 +14,10 @@ from collections import Counter
 from typing import Dict, List, Any
 
 
+WORD_TOKEN_PATTERN = re.compile(r'\b[a-zA-Z]+\b')
+SENTENCE_SPLIT_PATTERN = re.compile(r'(?<=[.!?])\s+')
+
+
 class SemanticFeatureExtractor:
     """Extracts semantic, perplexity, and coherence features."""
 
@@ -21,12 +25,10 @@ class SemanticFeatureExtractor:
         self.n_gram_order = n_gram_order
 
     def _tokenize_words(self, text: str) -> List[str]:
-        words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
-        return words
+        return WORD_TOKEN_PATTERN.findall(text.lower())
 
     def _split_sentences(self, text: str) -> List[str]:
-        sents = [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
-        return sents
+        return [s.strip() for s in SENTENCE_SPLIT_PATTERN.split(text) if s.strip()]
 
     def compute_word_ngram_perplexity(self, words: List[str], n: int = 2) -> Dict[str, float]:
         """

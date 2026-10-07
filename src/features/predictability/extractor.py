@@ -21,8 +21,11 @@ from typing import Dict, List, Any
 from dataclasses import dataclass, asdict
 
 
+TOKEN_PATTERN = re.compile(r"\b\w+\b")
+
+
 def _tokenize(text: str) -> List[str]:
-    return re.findall(r"\b\w+\b", text.lower())
+    return TOKEN_PATTERN.findall(text.lower())
 
 
 def _ngrams(tokens: List[str], n: int) -> List[str]:

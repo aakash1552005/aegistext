@@ -8,16 +8,21 @@ Generates human-interpretable explanations for detection decisions:
 4. Confidence and uncertainty calibration summary
 """
 
-import math
-import re
-from typing import Dict, List, Any, Optional
-import numpy as np
-
-from src.features.pipeline import MasterFeaturePipeline
-from src.preprocessing.normalizer import TextSanitizer
+# Precompiled regexes for high-performance sentence segmentation
+SENTENCE_SPLIT_PATTERN = re.compile(r'(?<=[.!?])\s+')
+AI_BUZZWORDS = frozenset([
+    "tapestry", "delve", "testament", "crucial", "multifaceted",
+    "pivotal", "holistic", "seamlessly", "underscores", "intertwined",
+    "fosters", "empowers", "unwavering", "paramount", "nuanced"
+])
+AI_TRANSITIONS = frozenset([
+    "furthermore", "moreover", "in conclusion", "consequently",
+    "additionally", "in summary", "subsequently", "importantly"
+])
 
 
 class AegisExplainer:
+
     """Produces multi-tiered explanations for model predictions."""
 
     def __init__(self, feature_pipeline: MasterFeaturePipeline):
@@ -134,44 +139,44 @@ class AegisExplainer:
 
     def _analyze_sentences(self, text: str) -> List[Dict[str, Any]]:
         """Per-sentence granularity scoring for frontend visual highlight."""
-        raw_sents = [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+        raw_sents = [s.strip() for s in SENTENCE_SPLIT_PATTERN.split(text) if s.strip()]
         if not raw_sents:
             return []
 
         results = []
         for idx, sent in enumerate(raw_sents):
-            # Evaluate sentence-level indicators
             words = sent.split()
             word_count = len(words)
-            has_formal_transition = any(sent.lower().startswith(t) for t in [
-                "furthermore", "moreover", "in conclusion", "consequently", "additionally", "in summary"
-            ])
-            has_buzzwords = any(w.lower() in ["tapestry", "delve", "testament", "crucial", "multifaceted"] for w in words)
+            sent_lower = sent.lower()
+
+            has_formal_transition = any(sent_lower.startswith(t) for t in AI_TRANSITIONS)
+            has_buzzwords = any(w.lower() in AI_BUZZWORDS for w in words)
 
             # Heuristic sentence AI likelihood
-            score = 0.5
+            score = 0.50
             if has_formal_transition:
                 score += 0.25
             if has_buzzwords:
                 score += 0.20
-            if 15 <= word_count <= 25:
+            if 15 <= word_count <= 26:
                 # LLM sweet spot
                 score += 0.10
-            elif word_count < 6 or word_count > 40:
+            elif word_count < 6 or word_count > 42:
                 # Extreme sentence length more typical in human prose
                 score -= 0.15
 
-            score = max(0.05, min(0.95, score))
+            score = max(0.04, min(0.96, score))
 
             results.append({
                 "sentence_index": idx,
                 "text": sent,
                 "word_count": word_count,
                 "ai_probability": round(score, 3),
-                "suspicion_level": "HIGH" if score >= 0.7 else ("MODERATE" if score >= 0.55 else "LOW"),
+                "suspicion_level": "HIGH" if score >= 0.70 else ("MODERATE" if score >= 0.50 else "LOW"),
             })
 
         return results
+
 
     def _generate_linguistic_diagnostics(
         self,

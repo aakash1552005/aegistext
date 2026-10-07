@@ -53,20 +53,25 @@ CONJUNCTIONS = {"and", "but", "or", "nor", "for", "yet", "so",
                 "because", "although", "while", "if", "unless", "until", "since", "after", "before"}
 
 
+TOKEN_REGEX = re.compile(r"\b\w+\b")
+SENTENCE_SPLIT_REGEX = re.compile(r'(?<=[.!?])\s+')
+PARAGRAPH_SPLIT_REGEX = re.compile(r'\n\s*\n')
+
+
 def _tokenize_simple(text: str) -> List[str]:
     """Simple whitespace + punctuation tokenizer."""
-    return re.findall(r"\b\w+\b", text.lower())
+    return TOKEN_REGEX.findall(text.lower())
 
 
 def _split_sentences(text: str) -> List[str]:
     """Split text into sentences using regex."""
-    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    sentences = SENTENCE_SPLIT_REGEX.split(text.strip())
     return [s.strip() for s in sentences if s.strip()]
 
 
 def _split_paragraphs(text: str) -> List[str]:
     """Split text into paragraphs."""
-    paragraphs = re.split(r'\n\s*\n', text.strip())
+    paragraphs = PARAGRAPH_SPLIT_REGEX.split(text.strip())
     return [p.strip() for p in paragraphs if p.strip()]
 
 
