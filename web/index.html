@@ -6,7 +6,7 @@
   <title>AegisText — Start with a document</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
   <header class="app-topbar">
     <div class="topbar-left">
       <!-- AegisText Logo (Four Corner Frame Mark + Wordmark) -->
-      <a href="#" class="topbar-brand">
+      <a href="#" class="topbar-brand" id="brandHomeLink">
         <svg class="brand-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 8V5a1 1 0 0 1 1-1h3"/>
           <path d="M16 4h3a1 1 0 0 1 1 1v3"/>
@@ -27,7 +27,7 @@
       </a>
 
       <nav class="topbar-nav">
-        <a href="#" class="topbar-nav-link active">Workspace</a>
+        <a href="#" class="topbar-nav-link active" id="linkWorkspace">Workspace</a>
       </nav>
     </div>
 
@@ -44,7 +44,7 @@
   <!-- App Shell Container -->
   <div class="app-shell">
     
-    <!-- Left Sidebar -->
+    <!-- Left Sidebar (Sticky & Fully Defined) -->
     <aside class="app-sidebar">
       <div class="sidebar-top">
         <div class="sidebar-section-title">WORKSPACE</div>
@@ -75,21 +75,16 @@
             <span>Organization</span>
           </button>
         </nav>
-
-        <div class="sidebar-disclaimer">
-          <p>Fictional workspace</p>
-          <p>Illustrative product design</p>
-        </div>
       </div>
 
       <div class="sidebar-bottom">
-        <a href="#guide" class="guide-link" id="btnOpenGuide">
+        <button class="guide-link-btn" id="btnOpenGuide">
           <svg class="guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
           <span class="guide-label">Assessment guide</span>
-        </a>
+        </button>
         <p class="guide-tagline">Evidence, not a verdict.</p>
       </div>
     </aside>
@@ -132,13 +127,13 @@
         <!-- Document Input Columns -->
         <div class="input-columns-grid">
           
-          <!-- Left Column: Dropzone Container -->
+          <!-- Left Column: Dropzone Container (Distinct Darker Dashed Border) -->
           <div class="dropzone-column">
             <div class="dropzone-box" id="dropzoneArea">
               <input type="file" id="fileInput" accept=".txt,.md,.pdf,.docx" style="display: none;">
               
               <div class="dropzone-icon-wrap">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                   <polyline points="14 2 14 8 20 8"/>
                   <line x1="12" y1="18" x2="12" y2="12"/>
@@ -150,7 +145,7 @@
               <p class="dropzone-sub">or select a file from your computer</p>
 
               <button class="btn-choose-file" id="btnChooseFile">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                   <polyline points="17 8 12 3 7 8"/>
                   <line x1="12" y1="3" x2="12" y2="15"/>
@@ -168,10 +163,14 @@
 
           <!-- Right Column: Excerpt Textarea Container -->
           <div class="excerpt-column">
-            <h3 class="excerpt-heading">Working with an excerpt?</h3>
-            <p class="excerpt-lead">
-              Paste a passage or a full document. More context can make the evidence easier to interpret.
-            </p>
+            <div class="excerpt-header-row">
+              <div>
+                <h3 class="excerpt-heading">Working with an excerpt?</h3>
+                <p class="excerpt-lead">
+                  Paste a passage or a full document. More context can make the evidence easier to interpret.
+                </p>
+              </div>
+            </div>
 
             <div class="excerpt-card">
               <textarea 
@@ -187,14 +186,12 @@
               <button class="btn-review-text" id="btnReviewText">Review text</button>
             </div>
 
-            <!-- Quick Preset Samples for Testing -->
-            <div class="preset-links-row">
-              <span class="preset-label">Load sample:</span>
-              <button class="btn-preset-link" id="presetAcademic">Academic human</button>
-              <span class="preset-sep">·</span>
-              <button class="btn-preset-link" id="presetSynthetic">AI generated</button>
-              <span class="preset-sep">·</span>
-              <button class="btn-preset-link" id="presetHumanized">Adversarial evasion</button>
+            <!-- Quick Preset Samples for Instant Testing -->
+            <div class="sample-loaders-bar">
+              <span class="sample-loaders-label">Load sample:</span>
+              <button class="btn-sample-tag" id="presetAcademic">Academic human</button>
+              <button class="btn-sample-tag" id="presetSynthetic">AI generated</button>
+              <button class="btn-sample-tag" id="presetHumanized">Adversarial evasion</button>
             </div>
           </div>
 
@@ -255,14 +252,115 @@
             </p>
 
             <div class="disclaimer-links">
-              <a href="#privacy" class="disclaimer-link" id="linkPrivacy">Privacy preferences ↗</a>
-              <a href="#limitations" class="disclaimer-link" id="linkLimitations">Assessment limitations ↗</a>
+              <button class="btn-text-link" id="linkPrivacy">Privacy preferences ↗</button>
+              <button class="btn-text-link" id="linkLimitations">Assessment limitations ↗</button>
             </div>
           </div>
 
         </div>
 
       </section>
+
+      <!-- VIEW: Analysis Library (Sidebar link) -->
+      <section id="viewLibrary" class="workspace-page hidden">
+        <div class="page-heading-group">
+          <div class="kicker-label">WORKSPACE ARCHIVE</div>
+          <h1 class="page-title">Analysis library</h1>
+          <p class="page-lead">History of documents analyzed within Northfield Research.</p>
+        </div>
+
+        <div class="library-table-card">
+          <table class="signals-table">
+            <thead>
+              <tr>
+                <th>Analyzed</th>
+                <th>Document Excerpt</th>
+                <th>Words</th>
+                <th>Assessment</th>
+                <th>Probability</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="libraryTableBody">
+              <tr>
+                <td colspan="6" class="empty-state-cell">No documents evaluated in this session yet. Run an analysis above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW: Organization Settings (Sidebar link) -->
+      <section id="viewOrganization" class="workspace-page hidden">
+        <div class="page-heading-group">
+          <div class="kicker-label">ORGANIZATION PREFERENCES</div>
+          <h1 class="page-title">Organization settings</h1>
+          <p class="page-lead">Policies, retention schedules, and detection parameters for Northfield Research.</p>
+        </div>
+
+        <div class="org-settings-card">
+          <div class="org-setting-row">
+            <div>
+              <strong>Organization Name</strong>
+              <p class="setting-desc">Primary workspace label displayed across audit certificates.</p>
+            </div>
+            <span class="setting-val-tag">Northfield Research</span>
+          </div>
+
+          <div class="org-setting-row">
+            <div>
+              <strong>Adversarial Defense Shield</strong>
+              <p class="setting-desc">Automatically normalize confusable Cyrillic homoglyphs and strip zero-width characters.</p>
+            </div>
+            <label class="toggle-control">
+              <input type="checkbox" id="toggleShield" checked>
+              <span>Enabled</span>
+            </label>
+          </div>
+
+          <div class="org-setting-row">
+            <div>
+              <strong>Posterior Decision Threshold</strong>
+              <p class="setting-desc">Calibrated threshold for classifying as AI-Generated (default: 0.50).</p>
+            </div>
+            <span class="setting-val-tag">0.50 (Calibrated)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: Assessment Guide Modal / View -->
+      <div class="review-modal-backdrop hidden" id="guideModal">
+        <div class="review-modal-container guide-container">
+          <div class="review-modal-header">
+            <div>
+              <span class="review-kicker">METHODOLOGY & GUIDELINES</span>
+              <h2 class="review-modal-title">Assessment Guide: Evidence, Not a Verdict</h2>
+            </div>
+            <button class="btn-modal-close" id="btnCloseGuide">&times;</button>
+          </div>
+          <div class="review-modal-body">
+            <div class="guide-content-block">
+              <h3 class="section-subhead">1. The Principle of Uncertainty</h3>
+              <p class="guide-p">
+                Machine learning text detectors cannot prove authorship beyond doubt. Statistical models evaluate stylistic regularity, vocabulary distribution, and transition entropy. These measures indicate similarity to synthetic training corpora, not legal certainty.
+              </p>
+              
+              <h3 class="section-subhead">2. Interpreting Linguistic Signals</h3>
+              <p class="guide-p">
+                Human writing exhibits high burstiness: sentences vary naturally in length, cadence, and vocabulary choice. In contrast, language model outputs often feature uniform token predictability and high discourse transition marker density.
+              </p>
+
+              <h3 class="section-subhead">3. Adversarial Robustness</h3>
+              <p class="guide-p">
+                AegisText incorporates proactive unicode sanitization, neutralizing zero-width spaces (<code>\u200b</code>) and confusable homoglyphs before evaluation.
+              </p>
+            </div>
+          </div>
+          <div class="review-modal-footer">
+            <button class="btn-action-primary" id="btnCloseGuideBtn">Understood</button>
+          </div>
+        </div>
+      </div>
 
       <!-- MODAL / DRAWER: Analysis Review & Considered Assessment -->
       <div class="review-modal-backdrop hidden" id="analysisModal">
@@ -355,73 +453,6 @@
 
         </div>
       </div>
-
-      <!-- VIEW: Analysis Library (Sidebar link) -->
-      <section id="viewLibrary" class="workspace-page hidden">
-        <div class="page-heading-group">
-          <div class="kicker-label">WORKSPACE ARCHIVE</div>
-          <h1 class="page-title">Analysis library</h1>
-          <p class="page-lead">History of documents analyzed within Northfield Research.</p>
-        </div>
-
-        <div class="library-table-card">
-          <table class="signals-table">
-            <thead>
-              <tr>
-                <th>Analyzed</th>
-                <th>Excerpt</th>
-                <th>Words</th>
-                <th>Assessment</th>
-                <th>AI Probability</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="libraryTableBody">
-              <tr>
-                <td colspan="6" class="empty-state-cell">No documents evaluated in this session yet.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- VIEW: Organization Settings (Sidebar link) -->
-      <section id="viewOrganization" class="workspace-page hidden">
-        <div class="page-heading-group">
-          <div class="kicker-label">ORGANIZATION PREFERENCES</div>
-          <h1 class="page-title">Organization settings</h1>
-          <p class="page-lead">Policies, retention schedules, and detection parameters for Northfield Research.</p>
-        </div>
-
-        <div class="org-settings-card">
-          <div class="org-setting-row">
-            <div>
-              <strong>Organization Name</strong>
-              <p class="setting-desc">Primary workspace label displayed across audit certificates.</p>
-            </div>
-            <span class="setting-val-tag">Northfield Research</span>
-          </div>
-
-          <div class="org-setting-row">
-            <div>
-              <strong>Adversarial Defense Shield</strong>
-              <p class="setting-desc">Automatically normalize confusable Cyrillic homoglyphs and strip zero-width characters.</p>
-            </div>
-            <label class="toggle-control">
-              <input type="checkbox" id="toggleShield" checked>
-              <span>Enabled</span>
-            </label>
-          </div>
-
-          <div class="org-setting-row">
-            <div>
-              <strong>Posterior Decision Threshold</strong>
-              <p class="setting-desc">Calibrated threshold for classifying as AI-Generated (default: 0.50).</p>
-            </div>
-            <span class="setting-val-tag">0.50 (Calibrated)</span>
-          </div>
-        </div>
-      </section>
 
     </main>
   </div>
