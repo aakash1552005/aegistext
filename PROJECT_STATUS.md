@@ -4,11 +4,31 @@
 ---
 
 ## 1. Current Phase
-- **Phase 13 — UI Refinements, Frame Line Contrast & 100% Client/Server Live Functionality**
+- **Phase 14 — Premier AI Detector Landing Page (Inspired by humanizeai.pro/detector)**
 
 ---
 
 ## 2. Completed Phases
+- **Phase 14 — Premier Commercial AI Text Detector Landing Page**
+  - Upgraded interface to match premier commercial detectors (like humanizeai.pro/detector):
+    - **Elevated Topbar**: AegisText brand mark, clean navigation (AI Detector, How It Works, Features, Benchmarks, FAQ), API reference link.
+    - **Hero & Primary Detector Card**:
+      - Research telemetry pill badge (84 linguistic signals, calibrated).
+      - Dual input support: Direct text paste and multi-format document upload (.txt, .md, .pdf, .docx).
+      - One-click sample test buttons: Academic paper, GPT-4 analysis, Paraphrased with evasion.
+      - Real-time word counter, character counter, read-time estimator, and clear text button.
+      - Adversarial Defense Shield toggle.
+      - High-visibility primary action button ("Detect AI Content", Ctrl+Enter).
+    - **In-Place Forensics Output Suite**:
+      - Circular score badge displaying AI likelihood percentage with color-coded classification.
+      - Latency, signal count, and 0.065 ECE calibration telemetry metrics.
+      - Adversarial alert notice when zero-width unicode or homoglyphs are intercepted.
+      - Three-tab forensic breakdown: Sentence-by-Sentence Heatmap (interactive sentence inspector), 84-Signal Attribution Table, and Diagnostic Feed.
+      - Instant Export Audit JSON & Print Verification Certificate actions.
+    - **Trust Strip**: Validated across GPT-4o, Claude 3.5 Sonnet, Gemini 1.5, Llama 3 70B, QuillBot, and Undetectable AI.
+    - **Product Sections**: 3-step How It Works, 4-pillar Enterprise Capabilities grid, Multi-Domain Benchmark table, Collapsible FAQ, and Enterprise footer.
+  - 100% functional live demo on Cloudflare Workers and localhost with dual-mode API + client-side inference fallback.
+
 - **Phase 13 — UI Refinements & Complete Functional Verification**
   - Darkened and made frame lines crisp and prominently visible:
     - Topbar bottom frame line: `1.5px solid #cbd5e1` (defined, crisp boundary).
