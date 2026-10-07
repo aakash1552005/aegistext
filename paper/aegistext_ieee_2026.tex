@@ -25,11 +25,11 @@
 \title{AegisText: An Adversarially Robust, Explainable, and Calibrated Framework for Detecting Humanized and Perturbed AI-Generated Text}
 
 \author{
-\IEEEauthorblockN{Aakash S. S.\IEEEauthorrefmark{1}, Sukesh S.\IEEEauthorrefmark{2}, and AegisText Research Consortium\IEEEauthorrefmark{3}}
+\IEEEauthorblockN{Medicharla Sukesh\IEEEauthorrefmark{1}, Chintakunta Thanuja\IEEEauthorrefmark{2}, Aakash S. S.\IEEEauthorrefmark{3}, and Dr. Karthikram Anbalagan\IEEEauthorrefmark{4}}
 \IEEEauthorblockA{Department of Computer Science and Engineering\\
-Anna University / Affiliated Research Institutions, Chennai, India\\
-Email: \IEEEauthorrefmark{1}aakash1552005@gmail.com, \IEEEauthorrefmark{2}sukesh.research@gmail.com}
-\thanks{Manuscript submitted to IEEE Transactions / Conference Series 2026. This investigation was conducted with institutional support from the Open Forensic Natural Language Processing Initiative. Corresponding author: Aakash S. S.}
+Vel Tech Rangarajan Dr. Sagunthala R\&D Institute of Science and Technology, Chennai, Tamil Nadu, India\\
+Email: \IEEEauthorrefmark{1}vtu25567@veltech.edu.in, \IEEEauthorrefmark{2}vtu25660@veltech.edu.in, \IEEEauthorrefmark{3}aakash1552005@gmail.com, \IEEEauthorrefmark{4}karthikram86@gmail.com}
+\thanks{\IEEEauthorrefmark{4}Dr. Karthikram Anbalagan is an Assistant Professor in the Department of Computer Science and Engineering, Vel Tech Rangarajan Dr. Sagunthala R\&D Institute of Science and Technology, Chennai, Tamil Nadu, India. Corresponding author: Dr. Karthikram Anbalagan (email: karthikram86@gmail.com).}
 }
 
 \maketitle
@@ -106,57 +106,10 @@ The adversary deploys two perturbation regimes:
 
 The architecture of AegisText is organized into four sequential tiers, as diagrammed in Fig.~\ref{fig:architecture}.
 
-% --- FIGURE 1: SYSTEM ARCHITECTURE (TIKZ) ---
+% --- FIGURE 1: SYSTEM ARCHITECTURE ---
 \begin{figure*}[!t]
 \centering
-\begin{tikzpicture}[
-    node distance=1.2cm and 1.5cm,
-    font=\small\sffamily,
-    layerbox/.style={draw=blue!60!black, line width=1pt, rounded corners=4pt, fill=blue!3, inner sep=8pt},
-    block/.style={draw=gray!80, line width=0.8pt, rounded corners=3pt, fill=white, align=center, inner sep=5pt, minimum height=0.85cm},
-    data/.style={draw=teal!70!black, line width=0.9pt, rounded corners=3pt, fill=teal!5, align=center, inner sep=5pt, minimum height=0.8cm},
-    arrow/.style={-{Stealth[length=6pt, width=4pt]}, line width=1pt, draw=gray!70!black}
-]
-
-% Input
-\node[data, minimum width=15cm] (input) {\textbf{Incoming Text Submission} $x_{\text{raw}}$ \quad (Pasted Excerpt, Academic Manuscript, Technical Document, or Journalism Draft)};
-
-% Tier 1
-\node[layerbox, below=0.6cm of input, minimum width=15cm] (tier1_box) {};
-\node[above right, font=\bfseries\color{blue!70!black}] at (tier1_box.north west) {\quad Tier 1: Adversarial Character Sanitization Pipeline};
-\node[block, below=0.25cm of input, xshift=-4.5cm] (t1_zw) {Zero-Width Unicode Auditor\\Eliminates \texttt{\textbackslash u200b}, \texttt{\textbackslash u200c}, \texttt{\textbackslash ufeff}};
-\node[block, right=0.5cm of t1_zw] (t1_homo) {Homoglyph Translation\\Maps Cyrillic/Greek confusables to Latin};
-\node[block, right=0.5cm of t1_homo] (t1_nfkc) {Unicode NFKC Normalizer\\Standardizes canonical character codes};
-
-% Tier 2
-\node[layerbox, below=1.6cm of tier1_box, minimum width=15cm] (tier2_box) {};
-\node[above right, font=\bfseries\color{blue!70!black}] at (tier2_box.north west) {\quad Tier 2: 84-Dimensional Linguistic Feature Extraction Engine};
-\node[block, below=0.8cm of t1_zw, xshift=-0.2cm] (t2_sty) {\textbf{Stylometry} (33 signals)\\TTR, MTLD, HD-D,\\Function Words, Pronouns};
-\node[block, right=0.4cm of t2_sty] (t2_prd) {\textbf{Predictability} (18 signals)\\Shannon Entropies $H_{1,2,3}$,\\Burstiness $B$, Zipfian Stats};
-\node[block, right=0.4cm of t2_prd] (t2_str) {\textbf{Discourse} (24 signals)\\Transition marker densities,\\Sentence starter diversity};
-\node[block, right=0.4cm of t2_str] (t2_sem) {\textbf{Semantics} (9 signals)\\N-Gram cross-entropy,\\Consecutive sentence Jaccard};
-
-% Tier 3
-\node[layerbox, below=1.6cm of tier2_box, minimum width=15cm] (tier3_box) {};
-\node[above right, font=\bfseries\color{blue!70!black}] at (tier3_box.north west) {\quad Tier 3: Isotonically Calibrated Classifier Ensemble};
-\node[block, below=0.7cm of t2_prd, xshift=0.3cm, minimum width=5.5cm] (t3_lgbm) {Gradient Boosted Forest Ensemble\\LightGBM \& Random Forest Classifiers \cite{ke2017lightgbm}};
-\node[block, right=1.0cm of t3_lgbm, minimum width=5.5cm] (t3_iso) {Isotonic Probability Calibration\\Pair-Adjacent Violators Algorithm \cite{zadrozny2002transforming}};
-
-% Tier 4
-\node[layerbox, below=1.5cm of tier3_box, minimum width=15cm] (tier4_box) {};
-\node[above right, font=\bfseries\color{blue!70!black}] at (tier4_box.north west) {\quad Tier 4: Explainability \& Forensic Diagnostic Reporting};
-\node[block, below=0.6cm of t3_lgbm, xshift=-1.5cm, minimum width=4cm] (t4_heat) {Sentence Attribution Heatmap\\Per-sentence suspicion scoring $w_k$};
-\node[block, right=0.5cm of t4_heat, minimum width=4cm] (t4_adv) {Adversarial Audit Certificate\\Identifies intercepted evasions};
-\node[block, right=0.5cm of t4_adv, minimum width=4cm] (t4_exp) {Forensic Telemetry Export\\Structured JSON \& PDF records};
-
-% Connectors
-\draw[arrow] (input) -- (tier1_box.north);
-\draw[arrow] (tier1_box.south) -- (tier2_box.north);
-\draw[arrow] (tier2_box.south) -- (tier3_box.north);
-\draw[arrow] (t3_lgbm) -- (t3_iso);
-\draw[arrow] (tier3_box.south) -- (tier4_box.north);
-
-\end{tikzpicture}
+\includegraphics[width=0.98\textwidth]{figures/fig1_architecture.jpg}
 \caption{System Architecture of AegisText. The pipeline sequentially sanitizes adversarial glyphs, extracts 84 domain-invariant linguistic descriptors, calibrates posterior probabilities via isotonic regression, and constructs sentence-level attribution heatmaps. Diagram derived from system engineering records \cite{aakash2026aegistext}.}
 \label{fig:architecture}
 \end{figure*}
@@ -254,41 +207,10 @@ which is solved via the Pair-Adjacent Violators (PAV) algorithm, as detailed in 
 \end{equation}
 where $\text{acc}(B_m)$ represents empirical accuracy in bin $B_m$, and $\text{conf}(B_m)$ denotes the mean confidence score of predictions within that bin.
 
-% --- FIGURE 2: OPERATIONAL FLOWCHART (TIKZ) ---
+% --- FIGURE 2: OPERATIONAL FLOWCHART ---
 \begin{figure}[!t]
 \centering
-\begin{tikzpicture}[
-    node distance=1.0cm and 1.2cm,
-    font=\footnotesize\sffamily,
-    startstop/.style={draw=purple!80!black, line width=1pt, rounded corners=6pt, fill=purple!5, align=center, inner sep=4pt, minimum width=3.2cm, minimum height=0.7cm},
-    process/.style={draw=blue!70!black, line width=0.8pt, rounded corners=3pt, fill=blue!5, align=center, inner sep=4pt, minimum width=3.4cm, minimum height=0.75cm},
-    decision/.style={diamond, draw=orange!80!black, line width=0.9pt, fill=orange!8, align=center, inner sep=2pt, aspect=1.8},
-    arrow/.style={-{Stealth[length=5pt, width=3.5pt]}, line width=0.8pt, draw=gray!80!black}
-]
-
-\node[startstop] (start) {Start: Candidate Text $x_{\text{raw}}$};
-\node[process, below=0.6cm of start] (audit) {Inspect for Invisible Unicode\\and Homoglyph Confusables};
-\node[decision, below=0.6cm of audit] (dec_adv) {Evasions\\Detected?};
-\node[process, right=0.8cm of dec_adv] (clean) {Sanitize Glyphs \& Log\\Adversarial Incident Report};
-\node[process, below=0.8cm of dec_adv] (nfkc) {Apply NFKC Normalization};
-\node[process, below=0.6cm of nfkc] (feat) {Extract 84-Dimensional Linguistic\\Signature Vector $\mathbf{x}_{\text{feat}} \in \mathbb{R}^{84}$};
-\node[process, below=0.6cm of feat] (gbm) {Evaluate Gradient Boosted Tree\\Ensemble $\hat{y} = \text{GBDT}(\mathbf{x}_{\text{feat}})$};
-\node[process, below=0.6cm of gbm] (iso) {Apply Isotonic Calibration:\\$P_{\text{AI}} = \Phi_{\text{Isotonic}}(\hat{y})$};
-\node[process, below=0.6cm of iso] (explain) {Derive Sentence Heatmap Weights\\and Signal Attributions};
-\node[startstop, below=0.6cm of explain] (output) {Output Forensic Report $\mathcal{R}$};
-
-\draw[arrow] (start) -- (audit);
-\draw[arrow] (audit) -- (dec_adv);
-\draw[arrow] (dec_adv) -- node[above, font=\scriptsize] {Yes} (clean);
-\draw[arrow] (clean) |- (nfkc);
-\draw[arrow] (dec_adv) -- node[right, font=\scriptsize] {No} (nfkc);
-\draw[arrow] (nfkc) -- (feat);
-\draw[arrow] (feat) -- (gbm);
-\draw[arrow] (gbm) -- (iso);
-\draw[arrow] (iso) -- (explain);
-\draw[arrow] (explain) -- (output);
-
-\end{tikzpicture}
+\includegraphics[width=0.95\linewidth]{figures/fig2_flowchart.jpg}
 \caption{Operational Execution Flowchart of AegisText. The pipeline branches dynamically to sanitize adversarial character encoding before feature extraction and probability calibration. Formulation based on system workflows \cite{aakash2026aegistext}.}
 \label{fig:flowchart}
 \end{figure}
