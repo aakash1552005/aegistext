@@ -13,6 +13,16 @@
 
 [**🌐 Live Application**](https://aegistext.aakash1552005.workers.dev) • [**📖 API Docs**](https://aegistext.aakash1552005.workers.dev/docs) • [**📊 Empirical Benchmarks**](#-empirical-benchmarks) • [**⚡ Quick Start**](#-quick-start) • [**📜 License**](#-license)
 
+<br />
+
+<a href="https://aegistext.aakash1552005.workers.dev" target="_blank">
+  <img src="docs/images/aegistext-preview.png" alt="AegisText Forensic AI Text Detector Interface" width="100%" />
+</a>
+
+<p><em>Production Forensic Studio: Multi-format document upload, direct text analysis, sentence-level heatmap, and adversarial defense.</em></p>
+
+[![Experience Live Demo](https://img.shields.io/badge/▶_Launch_Live_Detector-aegistext.aakash1552005.workers.dev-10b981?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aegistext.aakash1552005.workers.dev)
+
 </div>
 
 ---
