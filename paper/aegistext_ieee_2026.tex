@@ -90,43 +90,47 @@ AegisText is organized into four decoupled operational tiers: raw text sanitizat
 
 \begin{figure*}[t!]
 \centering
-\IfFileExists{figures/fig1_architecture.jpg}{%
-    \includegraphics[width=0.95\textwidth]{figures/fig1_architecture.jpg}%
+\IfFileExists{fig1_architecture.jpg}{%
+    \includegraphics[width=0.95\textwidth]{fig1_architecture.jpg}%
 }{%
-    \begin{tikzpicture}[
-        node distance=0.8cm and 1.2cm,
-        font=\small\sffamily,
-        tier/.style={draw=blue!70!black, line width=1pt, rounded corners=4pt, fill=blue!4, align=center, inner sep=6pt, minimum width=15cm},
-        arrow/.style={-{Stealth[length=5pt, width=3.5pt]}, line width=1pt, draw=gray!70!black}
-    ]
-    \node[tier] (t1) {\textbf{Tier 1: Adversarial Character Sanitization Pipeline}\\
-    \begin{tabular}{ccc}
-    \fbox{\parbox{4.5cm}{\centering \textbf{Zero-Width Auditor}\\Removes \texttt{\textbackslash u200b}, \texttt{\textbackslash ufeff}, \texttt{\textbackslash u200c}}} &
-    \fbox{\parbox{4.5cm}{\centering \textbf{Homoglyph Translation}\\Cyrillic/Greek $\to$ Latin Table}} &
-    \fbox{\parbox{4.5cm}{\centering \textbf{NFKC Normalizer}\\Canonical Unicode Decomposition}}
-    \end{tabular}};
-    \node[tier, below=0.6cm of t1] (t2) {\textbf{Tier 2: 84-Dimensional Linguistic Feature Extraction}\\
-    \begin{tabular}{cccc}
-    \fbox{\parbox{3.3cm}{\centering \textbf{Stylometry (33)}\\TTR, MTLD, HD-D, POS}} &
-    \fbox{\parbox{3.3cm}{\centering \textbf{Predictability (18)}\\Entropy $H_{1,2,3}$, Burstiness}} &
-    \fbox{\parbox{3.3cm}{\centering \textbf{Discourse (24)}\\Transitions, Paragraphs}} &
-    \fbox{\parbox{3.3cm}{\centering \textbf{Semantics (9)}\\Cross-Entropy, Jaccard}}
-    \end{tabular}};
-    \node[tier, below=0.6cm of t2] (t3) {\textbf{Tier 3: Isotonically Calibrated Classifier Ensemble}\\
-    \begin{tabular}{cc}
-    \fbox{\parbox{7cm}{\centering \textbf{Gradient Boosted Decision Trees}\\LightGBM \& Random Forest Ensembles [15]}} &
-    \fbox{\parbox{7cm}{\centering \textbf{Isotonic Probability Calibration}\\Pair-Adjacent Violators (PAV) Algorithm [15]}}
-    \end{tabular}};
-    \node[tier, below=0.6cm of t3] (t4) {\textbf{Tier 4: Forensic Explainability \& Diagnostic Reporting}\\
-    \begin{tabular}{ccc}
-    \fbox{\parbox{4.5cm}{\centering \textbf{Sentence Attribution Heatmap}\\Suspicion Weights $w_k \in [0,1]$}} &
-    \fbox{\parbox{4.5cm}{\centering \textbf{Adversarial Audit Certificate}\\Logged Micro-Evasion Offsets}} &
-    \fbox{\parbox{4.5cm}{\centering \textbf{Diagnostic Telemetry}\\Exportable JSON \& Audit Records}}
-    \end{tabular}};
-    \draw[arrow] (t1) -- (t2);
-    \draw[arrow] (t2) -- (t3);
-    \draw[arrow] (t3) -- (t4);
-    \end{tikzpicture}%
+    \IfFileExists{figures/fig1_architecture.jpg}{%
+        \includegraphics[width=0.95\textwidth]{figures/fig1_architecture.jpg}%
+    }{%
+        \begin{tikzpicture}[
+            node distance=0.8cm and 1.2cm,
+            font=\small\sffamily,
+            tier/.style={draw=blue!70!black, line width=1pt, rounded corners=4pt, fill=blue!4, align=center, inner sep=6pt, minimum width=15cm},
+            arrow/.style={-{Stealth[length=5pt, width=3.5pt]}, line width=1pt, draw=gray!70!black}
+        ]
+        \node[tier] (t1) {\textbf{Tier 1: Adversarial Character Sanitization Pipeline}\\
+        \begin{tabular}{ccc}
+        \fbox{\parbox{4.5cm}{\centering \textbf{Zero-Width Auditor}\\Removes \texttt{\textbackslash u200b}, \texttt{\textbackslash ufeff}, \texttt{\textbackslash u200c}, \texttt{\textbackslash u2060}}} &
+        \fbox{\parbox{4.5cm}{\centering \textbf{Homoglyph Translation}\\Cyrillic/Greek $\to$ Latin Normalizer Table}} &
+        \fbox{\parbox{4.5cm}{\centering \textbf{NFKC Normalizer}\\Canonical Unicode Decomposition}}
+        \end{tabular}};
+        \node[tier, below=0.6cm of t1] (t2) {\textbf{Tier 2: 84-Dimensional Linguistic Feature Extraction}\\
+        \begin{tabular}{cccc}
+        \fbox{\parbox{3.3cm}{\centering \textbf{Stylometry (33)}\\TTR, MTLD, HD-D, POS}} &
+        \fbox{\parbox{3.3cm}{\centering \textbf{Predictability (18)}\\Entropy $H_{1,2,3}$, Burstiness $B$}} &
+        \fbox{\parbox{3.3cm}{\centering \textbf{Discourse (24)}\\Transitions, Paragraph Rhythm}} &
+        \fbox{\parbox{3.3cm}{\centering \textbf{Semantics (9)}\\Cross-Entropy, Jaccard Drift}}
+        \end{tabular}};
+        \node[tier, below=0.6cm of t2] (t3) {\textbf{Tier 3: Isotonically Calibrated Classifier Ensemble}\\
+        \begin{tabular}{cc}
+        \fbox{\parbox{7cm}{\centering \textbf{Gradient Boosted Decision Trees}\\LightGBM \& Random Forest Ensembles [15]}} &
+        \fbox{\parbox{7cm}{\centering \textbf{Isotonic Probability Calibration}\\Pair-Adjacent Violators (PAV) Algorithm [15]}}
+        \end{tabular}};
+        \node[tier, below=0.6cm of t3] (t4) {\textbf{Tier 4: Forensic Explainability \& Diagnostic Reporting}\\
+        \begin{tabular}{ccc}
+        \fbox{\parbox{4.5cm}{\centering \textbf{Sentence Attribution Heatmap}\\Suspicion Weights $w_k \in [0,1]$}} &
+        \fbox{\parbox{4.5cm}{\centering \textbf{Adversarial Audit Certificate}\\Logged Micro-Evasion Offsets}} &
+        \fbox{\parbox{4.5cm}{\centering \textbf{Diagnostic Telemetry}\\Exportable JSON \& Audit Records}}
+        \end{tabular}};
+        \draw[arrow] (t1) -- (t2);
+        \draw[arrow] (t2) -- (t3);
+        \draw[arrow] (t3) -- (t4);
+        \end{tikzpicture}%
+    }%
 }
 \caption{Decoupled four-tier system architecture of AegisText illustrating adversarial sanitization, 84-dimensional feature extraction, calibrated ensemble modeling, and forensic heatmap attribution.}
 \label{fig:block_diagram}
@@ -134,52 +138,58 @@ AegisText is organized into four decoupled operational tiers: raw text sanitizat
 
 \begin{figure}[htbp]
 \centering
-\IfFileExists{figures/fig2_flowchart.jpg}{%
-    \includegraphics[width=0.88\linewidth]{figures/fig2_flowchart.jpg}%
+\IfFileExists{fig2_flowchart.jpg}{%
+    \includegraphics[width=0.88\linewidth]{fig2_flowchart.jpg}%
 }{%
-    \begin{tikzpicture}[
-        node distance=0.65cm and 1cm,
-        font=\footnotesize\sffamily,
-        pbox/.style={draw=blue!70!black, line width=0.8pt, rounded corners=3pt, fill=blue!5, align=center, inner sep=3.5pt, minimum width=3.2cm},
-        dbox/.style={diamond, draw=orange!80!black, line width=0.8pt, fill=orange!8, align=center, inner sep=2pt, aspect=1.8},
-        arrow/.style={-{Stealth[length=4pt, width=3pt]}, line width=0.8pt, draw=gray!80!black}
-    ]
-    \node[pbox, fill=purple!5, draw=purple!80!black, rounded corners=6pt] (start) {Start: Candidate Text $x_{\text{raw}}$};
-    \node[pbox, below=0.45cm of start] (audit) {Inspect for Invisible\\Unicode \& Homoglyphs};
-    \node[dbox, below=0.45cm of audit] (dec) {Evasion\\Found?};
-    \node[pbox, right=0.55cm of dec] (clean) {Sanitize Glyphs \&\\Log Audit Report};
-    \node[pbox, below=0.55cm of dec] (nfkc) {Apply NFKC Normalization};
-    \node[pbox, below=0.45cm of nfkc] (feat) {Extract 84-D Linguistic Vector $\mathbf{x}_{\text{feat}}$};
-    \node[pbox, below=0.45cm of feat] (gbm) {Evaluate LightGBM Ensemble};
-    \node[pbox, below=0.45cm of gbm] (iso) {Isotonic Calibration: $P_{\text{AI}} = \Phi(\hat{y})$};
-    \node[pbox, below=0.45cm of iso] (heat) {Compute Sentence Weights $w_k$};
-    \node[pbox, below=0.45cm of heat, fill=purple!5, draw=purple!80!black, rounded corners=6pt] (out) {Output Forensic Report $\mathcal{R}$};
-    \draw[arrow] (start) -- (audit);
-    \draw[arrow] (audit) -- (dec);
-    \draw[arrow] (dec) -- node[above, font=\tiny] {Yes} (clean);
-    \draw[arrow] (clean) |- (nfkc);
-    \draw[arrow] (dec) -- node[right, font=\tiny] {No} (nfkc);
-    \draw[arrow] (nfkc) -- (feat);
-    \draw[arrow] (feat) -- (gbm);
-    \draw[arrow] (gbm) -- (iso);
-    \draw[arrow] (iso) -- (heat);
-    \draw[arrow] (heat) -- (out);
-    \end{tikzpicture}%
+    \IfFileExists{figures/fig2_flowchart.jpg}{%
+        \includegraphics[width=0.88\linewidth]{figures/fig2_flowchart.jpg}%
+    }{%
+        \begin{tikzpicture}[
+            node distance=0.65cm and 1cm,
+            font=\footnotesize\sffamily,
+            pbox/.style={draw=blue!70!black, line width=0.8pt, rounded corners=3pt, fill=blue!5, align=center, inner sep=3.5pt, minimum width=3.2cm},
+            dbox/.style={diamond, draw=orange!80!black, line width=0.8pt, fill=orange!8, align=center, inner sep=2pt, aspect=1.8},
+            arrow/.style={-{Stealth[length=4pt, width=3pt]}, line width=0.8pt, draw=gray!80!black}
+        ]
+        \node[pbox, fill=purple!5, draw=purple!80!black, rounded corners=6pt] (start) {Start: Candidate Text $x_{\text{raw}}$};
+        \node[pbox, below=0.45cm of start] (audit) {Inspect for Invisible\\Unicode \& Homoglyphs};
+        \node[dbox, below=0.45cm of audit] (dec) {Evasion\\Found?};
+        \node[pbox, right=0.55cm of dec] (clean) {Sanitize Glyphs \&\\Log Audit Report};
+        \node[pbox, below=0.55cm of dec] (nfkc) {Apply NFKC Normalization};
+        \node[pbox, below=0.45cm of nfkc] (feat) {Extract 84-D Linguistic Vector $\mathbf{x}_{\text{feat}}$};
+        \node[pbox, below=0.45cm of feat] (gbm) {Evaluate LightGBM Ensemble};
+        \node[pbox, below=0.45cm of gbm] (iso) {Isotonic Calibration: $P_{\text{AI}} = \Phi(\hat{y})$};
+        \node[pbox, below=0.45cm of iso] (heat) {Compute Sentence Weights $w_k$};
+        \node[pbox, below=0.45cm of heat, fill=purple!5, draw=purple!80!black, rounded corners=6pt] (out) {Output Forensic Report $\mathcal{R}$};
+        \draw[arrow] (start) -- (audit);
+        \draw[arrow] (audit) -- (dec);
+        \draw[arrow] (dec) -- node[above, font=\tiny] {Yes} (clean);
+        \draw[arrow] (clean) |- (nfkc);
+        \draw[arrow] (dec) -- node[right, font=\tiny] {No} (nfkc);
+        \draw[arrow] (nfkc) -- (feat);
+        \draw[arrow] (feat) -- (gbm);
+        \draw[arrow] (gbm) -- (iso);
+        \draw[arrow] (iso) -- (heat);
+        \draw[arrow] (heat) -- (out);
+        \end{tikzpicture}%
+    }%
 }
 \caption{Step-by-step operational workflow from candidate text submission through adversarial auditing, NFKC normalization, GBDT evaluation, isotonic calibration, and forensic reporting.}
 \label{fig:flow_diagram}
 \end{figure}
 
 \subsection{Adversarial Character Sanitization Pipeline}
-When a document arrives, the pipeline first inspects the raw text $x_{\text{raw}}$ for hidden unicode anomalies. We define the zero-width character set $\mathcal{Z}$ across two formatted lines to respect strict column boundaries:
+When a document arrives, the pipeline first inspects the raw text $x_{\text{raw}}$ for hidden unicode anomalies. We define the zero-width character set $\mathcal{Z}$ across two formatted lines in \eqref{eq:zerowidth} to strictly respect column margins:
 \begin{equation}
+\label{eq:zerowidth}
 \begin{aligned}
     \mathcal{Z} = \{ & \text{U+200B}, \text{U+200C}, \text{U+200D}, \text{U+2060}, \\
                      & \text{U+FEFF}, \text{U+00AD}, \text{U+200E}, \text{U+200F} \}
 \end{aligned}
 \end{equation}
-Any detected occurrences are audited with their exact character offsets and excised using a precompiled linear regular expression. Visual homoglyphs from Cyrillic and Greek unicode blocks are canonicalized to standard Latin equivalents via a static translation lookup table $\mathcal{M}_{\text{homo}}$:
+Any detected occurrences are audited with their exact character offsets and excised using a precompiled linear regular expression. Visual homoglyphs from Cyrillic and Greek unicode blocks are canonicalized to standard Latin equivalents via a static translation lookup table $\mathcal{M}_{\text{homo}}$, formalized in \eqref{eq:homoglyph}:
 \begin{equation}
+\label{eq:homoglyph}
     x_{\text{clean}} = \text{translate}(x_{\text{raw}} \setminus \mathcal{Z}, \mathcal{M}_{\text{homo}})
 \end{equation}
 Executing this step in C-level memory guarantees $O(N)$ runtime without repeated string reallocations. Finally, Unicode NFKC decomposition unifies remaining ligature and typography anomalies.
@@ -189,39 +199,51 @@ Once normalized, the text is mapped into an 84-dimensional vector $\mathbf{x}_{\
 
 \begin{enumerate}
     \item \textbf{Stylometry (33 features):} Measures vocabulary richness and grammatical habits, including Type-Token Ratio ($\text{TTR} = |\mathcal{V}|/N$), Hapax Legomena ratio, and the Measure of Textual Lexical Diversity (MTLD) with a factor threshold of 0.72. Frequencies of modal verbs, personal pronouns (first, second, third person), and clause markers are also tabulated.
-    \item \textbf{Predictability and Entropy (18 features):} Evaluates token predictability. We compute Shannon token entropy for unigrams, bigrams, and trigrams:
+    \item \textbf{Predictability and Entropy (18 features):} Evaluates token predictability. We compute Shannon token entropy for unigrams, bigrams, and trigrams according to \eqref{eq:entropy}:
     \begin{equation}
+    \label{eq:entropy}
         H_n(X) = -\sum_{i=1}^{|\mathcal{V}_n|} p(w_i) \log_2 p(w_i)
     \end{equation}
-    Token recurrence burstiness ($B$) measures the regularity of repeated word appearances:
+    Token recurrence burstiness ($B$) measures the regularity of repeated word appearances as formulated in \eqref{eq:burstiness}:
     \begin{equation}
+    \label{eq:burstiness}
         B = \frac{\sigma_{\Delta t} - \mu_{\Delta t}}{\sigma_{\Delta t} + \mu_{\Delta t}} \in [-1, 1]
     \end{equation}
     Human writing displays positive burstiness ($B > 0$), whereas machine text hovers close to zero ($B \approx 0$).
     \item \textbf{Discourse Structure (24 features):} Tracks macro-level paragraph rhythm, variance in sentence lengths, and the density of categorized transition markers (Addition, Contrast, Causality, Sequence, Conclusion).
-    \item \textbf{Semantic Coherence (9 features):} Quantifies sentence-to-sentence vocabulary overlap using Jaccard similarity between adjacent sentences ($S_i, S_{i+1}$):
+    \item \textbf{Semantic Coherence (9 features):} Quantifies sentence-to-sentence vocabulary overlap using Jaccard similarity between adjacent sentences ($S_i, S_{i+1}$) defined in \eqref{eq:jaccard}:
     \begin{equation}
+    \label{eq:jaccard}
         \text{Sim}_{\text{Jaccard}}(S_i, S_{i+1}) = \frac{|S_i \cap S_{i+1}|}{|S_i \cup S_{i+1}|}
     \end{equation}
     alongside n-gram cross-entropy and semantic monotony indices.
 \end{enumerate}
 
 \subsection{Ensemble Classification and Isotonic Calibration}
-The feature vector $\mathbf{x}_{\text{feat}}$ is classified using an ensemble of LightGBM gradient boosted decision trees [15]. Because raw tree scores do not correspond to reliable probabilities, we fit a monotonic step function $\Phi: \mathbb{R} \to [0, 1]$ using Isotonic Regression via the Pair-Adjacent Violators (PAV) algorithm:
+The feature vector $\mathbf{x}_{\text{feat}}$ is classified using an ensemble of LightGBM gradient boosted decision trees [15]. Because raw tree scores do not correspond to reliable probabilities, we fit a monotonic step function $\Phi: \mathbb{R} \to [0, 1]$ using Isotonic Regression via the Pair-Adjacent Violators (PAV) algorithm expressed in \eqref{eq:isotonic}:
 \begin{equation}
-    \min_{\Phi} \sum_{i=1}^{M} \left( y_i - \Phi(f(\mathbf{x}_i)) \right)^2 \quad \text{s.t.} \quad \Phi(a) \le \Phi(b) \; \forall a \le b
+\label{eq:isotonic}
+\begin{aligned}
+    \min_{\Phi} & \sum_{i=1}^{M} \left( y_i - \Phi(f(\mathbf{x}_i)) \right)^2 \\
+    \text{s.t.} & \quad \Phi(a) \le \Phi(b) \quad \forall a \le b
+\end{aligned}
 \end{equation}
-Calibration quality is evaluated via Expected Calibration Error (ECE) across $M$ equal-interval probability bins $B_1, \dots, B_M$ [15]:
+Calibration quality is evaluated via Expected Calibration Error (ECE) across $M$ equal-interval probability bins $B_1, \dots, B_M$ [15] as defined in \eqref{eq:ece}:
 \begin{equation}
+\label{eq:ece}
     \text{ECE} = \sum_{m=1}^{M} \frac{|B_m|}{N} \left| \text{acc}(B_m) - \text{conf}(B_m) \right|
 \end{equation}
 
 \subsection{Sentence Attribution Heatmap Engine}
-To provide actionable evidence, the document is split into sentences $\{s_1, \dots, s_K\}$. Each sentence receives an attribution weight $w_k$:
+To provide actionable evidence, the document is split into sentences $\{s_1, \dots, s_K\}$. Each sentence receives an attribution weight $w_k$ computed via \eqref{eq:weight}:
 \begin{equation}
-    w_k = \alpha \cdot \mathcal{S}_{\text{trans}}(s_k) + \beta \cdot \mathcal{S}_{\text{len}}(s_k) + \gamma \cdot \mathcal{S}_{\text{entropy}}(s_k)
+\label{eq:weight}
+\begin{aligned}
+    w_k = {} & \alpha \cdot \mathcal{S}_{\text{trans}}(s_k) + \beta \cdot \mathcal{S}_{\text{len}}(s_k) \\
+             & + \gamma \cdot \mathcal{S}_{\text{entropy}}(s_k)
+\end{aligned}
 \end{equation}
-where $\alpha + \beta + \gamma = 1$. Sentences with $w_k \ge 0.75$ are highlighted in red (high AI regularities), $0.45 \le w_k < 0.75$ in yellow, and $w_k < 0.45$ in green (natural human burstiness). The workflow is shown in Fig.~\ref{fig:flow_diagram}.
+where $\alpha + \beta + \gamma = 1$ ($\alpha=0.45, \beta=0.25, \gamma=0.30$). Sentences with $w_k \ge 0.75$ are highlighted in red (high AI regularities), $0.45 \le w_k < 0.75$ in yellow, and $w_k < 0.45$ in green (natural human burstiness). The complete step-by-step workflow is depicted in Fig.~\ref{fig:flow_diagram}.
 
 \section{Discussion}
 
