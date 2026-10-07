@@ -3,256 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AegisText — Adversarially Robust AI Detection</title>
+  <title>AegisText Studio — Adversarially Robust AI Text Detection</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <!-- Header Bar -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="brand">
-        <div class="logo-shield">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<body class="theme-dark">
+  <!-- Top App Navigation -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-badge-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             <path d="m9 12 2 2 4-4"/>
           </svg>
         </div>
-        <div class="brand-text">
-          <span class="brand-name">Aegis<span class="gradient-text">Text</span></span>
-          <span class="badge-research">Research Grade v1.0</span>
+        <div class="brand-titles">
+          <span class="app-title">AegisText <span class="app-sub-badge">STUDIO</span></span>
+          <span class="app-subtitle">Adversarially Robust AI Detection & Attribution</span>
         </div>
       </div>
-      <nav class="nav-links">
-        <button id="btnOpenBenchmarks" class="nav-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-          Empirical Benchmarks
-        </button>
-        <button id="btnOpenDocs" class="nav-btn" onclick="window.open('/docs', '_blank')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          API Docs
-        </button>
-        <div class="status-indicator online" id="apiStatusIndicator" title="System Online">
-          <span class="dot"></span>
-          <span id="apiStatusText">Engine Online</span>
+
+      <div class="header-nav-center">
+        <div class="model-telemetry-pill" title="Live Model Architecture Status">
+          <span class="status-pulse"></span>
+          <span class="telemetry-label">Engine: Calibrated Ensemble</span>
+          <span class="telemetry-divider">•</span>
+          <span class="telemetry-stat">84 Signals</span>
+          <span class="telemetry-divider">•</span>
+          <span class="telemetry-stat">0.996 AUROC</span>
         </div>
-      </nav>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnOpenBenchmarks" class="nav-action-btn" title="View multi-domain empirical benchmarks">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          Benchmarks
+        </button>
+        <button id="btnOpenDocs" class="nav-action-btn" onclick="window.open('/docs', '_blank')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          API Reference
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Main Workspace -->
-  <main class="main-container">
-    <section class="hero-section">
-      <h1 class="hero-title">Adversarially Robust, Explainable <br><span class="gradient-title">AI Text Detection</span></h1>
-      <p class="hero-subtitle">Calibrated linguistic defense against modern LLMs, commercial paraphrasers, and character-level adversarial evasion attacks.</p>
-    </section>
-
-    <!-- Analysis Grid -->
-    <div class="workspace-grid">
-      <!-- Input Panel -->
-      <div class="card input-card">
-        <div class="card-header">
-          <span class="card-title">Input Document</span>
-          <div class="preset-buttons">
-            <span class="preset-label">Sample Presets:</span>
-            <button class="pill-btn" id="btnPresetHuman">Human Research</button>
-            <button class="pill-btn" id="btnPresetAi">Raw GPT-4</button>
-            <button class="pill-btn" id="btnPresetHumanized">Adversarial AI</button>
+  <!-- Studio Workspace -->
+  <main class="studio-wrapper">
+    <div class="workspace-layout">
+      
+      <!-- Left Panel: Document Editor & Inspector -->
+      <section class="editor-pane">
+        <div class="pane-header">
+          <div class="pane-title-group">
+            <h2 class="pane-title">Document Inspector</h2>
+            <span class="pane-tag">Plaintext & Markdown</span>
           </div>
-        </div>
-        <div class="textarea-wrapper">
-          <textarea id="inputText" placeholder="Paste or type text to inspect for AI authorship, humanization rewrites, and adversarial evasion markers..." rows="12"></textarea>
-          <div class="text-meta-bar">
-            <span id="charCountLabel">0 characters</span>
-            <span id="wordCountLabel">0 words</span>
-          </div>
-        </div>
-        
-        <div class="options-bar">
-          <label class="toggle-control" title="Intercepts and sanitizes zero-width spaces and Cyrillic/Greek homoglyphs">
-            <input type="checkbox" id="toggleSanitize" checked>
-            <span class="slider"></span>
-            <span class="toggle-text">Adversarial Tampering Defense (Auto-Sanitize)</span>
-          </label>
-          <div class="action-buttons">
-            <button id="btnClear" class="btn-secondary">Clear</button>
-            <button id="btnAnalyze" class="btn-primary">
-              <span class="btn-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              </span>
-              Analyze Text
+          <div class="pane-toolbar">
+            <label class="btn-tool" title="Upload local text file">
+              <input type="file" id="fileUpload" accept=".txt,.md" style="display: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload
+            </label>
+            <button class="btn-tool" id="btnClearText" title="Clear document">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Clear
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Live Results View -->
-      <div class="card results-card" id="resultsContainer">
-        <!-- Default Empty State -->
-        <div class="empty-state" id="emptyStateView">
-          <div class="empty-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <path d="M14 2v6h6"/>
-              <path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
-            </svg>
+        <!-- Preset Quick Bar -->
+        <div class="preset-selector-row">
+          <span class="preset-hint">Sample Presets:</span>
+          <div class="preset-pill-group">
+            <button class="preset-pill" id="btnPresetHuman" data-type="human">
+              <span class="preset-icon human-icon">●</span>
+              Peer-Reviewed Paper (Human)
+            </button>
+            <button class="preset-pill" id="btnPresetAi" data-type="ai">
+              <span class="preset-icon ai-icon">●</span>
+              GPT-4 Analysis (Pure AI)
+            </button>
+            <button class="preset-pill" id="btnPresetHumanized" data-type="humanized">
+              <span class="preset-icon adv-icon">●</span>
+              Paraphrased + Zero-Width Evasion
+            </button>
           </div>
-          <h3>Ready for Analysis</h3>
-          <p>Paste text on the left and click <strong>Analyze Text</strong> to generate calibrated probabilities, sentence diagnostics, and explainability attributions.</p>
         </div>
 
-        <!-- Populated Results State (Hidden by default) -->
-        <div class="results-content hidden" id="resultsContentView">
-          <!-- Summary Header -->
-          <div class="score-banner" id="scoreBanner">
-            <div class="classification-info">
-              <span class="meta-small">CALIBRATED VERDICT</span>
-              <h2 class="classification-badge" id="classificationBadge">AI_GENERATED</h2>
-              <p class="confidence-text" id="confidenceBandText">Confidence: High (Platt calibrated)</p>
+        <!-- Editor Area -->
+        <div class="editor-container">
+          <textarea id="inputText" placeholder="Paste or type text to inspect for AI authorship, paraphrasing rewrites, and adversarial evasion markers (minimum 10 characters)..." spellcheck="false"></textarea>
+        </div>
+
+        <!-- Bottom Status Bar -->
+        <div class="editor-meta-footer">
+          <div class="meta-stats">
+            <span class="stat-item"><strong id="wordCountLabel">0</strong> words</span>
+            <span class="stat-sep">•</span>
+            <span class="stat-item"><strong id="charCountLabel">0</strong> chars</span>
+            <span class="stat-sep">•</span>
+            <span class="stat-item"><strong id="readTimeLabel">0</strong> min read</span>
+          </div>
+
+          <div class="editor-controls-right">
+            <label class="shield-toggle" title="Neutralizes Cyrillic/Greek homoglyphs and hidden zero-width unicode before classification">
+              <input type="checkbox" id="toggleSanitize" checked>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="shield-text">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Adversarial Defense Shield
+              </span>
+            </label>
+
+            <button id="btnAnalyze" class="btn-primary-action">
+              <span class="btn-label-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Run Forensics
+              </span>
+              <span class="btn-shortcut">Ctrl+↵</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Forensic Telemetry & Analysis Studio -->
+      <section class="telemetry-pane">
+        
+        <!-- Pre-Flight State: When no analysis has run yet -->
+        <div class="preflight-state" id="preflightStateView">
+          <div class="preflight-header">
+            <div class="preflight-badge">READY TO INSPECT</div>
+            <h3 class="preflight-heading">AegisText Diagnostic Telemetry</h3>
+            <p class="preflight-desc">Enter text or select a benchmark sample to evaluate calibrated AI probability, sentence-level heatmap attribution, and adversarial evasion detection.</p>
+          </div>
+
+          <!-- 3 Architecture Highlights -->
+          <div class="preflight-cards-grid">
+            <div class="preflight-card">
+              <div class="preflight-card-icon" style="color: #6366f1;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>
+              </div>
+              <h4>84 Multi-Signal Features</h4>
+              <p>Fuses stylometry, discourse transition entropy, Zipfian burstiness, and semantic cross-entropy.</p>
             </div>
-            <div class="gauge-box">
-              <div class="gauge-value" id="aiProbabilityValue">96.4%</div>
-              <span class="gauge-label">AI Likelihood</span>
-              <div class="gauge-bar-track">
-                <div class="gauge-bar-fill" id="gaugeBarFill"></div>
+            <div class="preflight-card">
+              <div class="preflight-card-icon" style="color: #10b981;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              </div>
+              <h4>Adversarial Immunity</h4>
+              <p>100% neutralized against zero-width spaces (`\u200b`) and Cyrillic/Greek homoglyph substitutions.</p>
+            </div>
+            <div class="preflight-card">
+              <div class="preflight-card-icon" style="color: #06b6d4;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              </div>
+              <h4>Platt Probability Calibration</h4>
+              <p>Achieves 0.065 ECE with calibrated posterior confidence to prevent false positive accusations.</p>
+            </div>
+          </div>
+
+          <!-- Quick Test Launcher Cards -->
+          <div class="quick-launch-section">
+            <h5 class="quick-launch-title">One-Click Benchmark Demonstrations:</h5>
+            <div class="quick-launch-list">
+              <div class="quick-item" id="quickRunHuman">
+                <div class="quick-tag human">HUMAN</div>
+                <div class="quick-info">
+                  <strong>Academic Research Abstract</strong>
+                  <span>Distributed consensus trade-offs (Organic Human Authorship)</span>
+                </div>
+                <button class="btn-quick-run">Inspect →</button>
+              </div>
+              <div class="quick-item" id="quickRunAi">
+                <div class="quick-tag ai">AI RAW</div>
+                <div class="quick-info">
+                  <strong>GPT-4 Synthesized Architecture Paper</strong>
+                  <span>Formulaic transitions and high semantic monotony</span>
+                </div>
+                <button class="btn-quick-run">Inspect →</button>
+              </div>
+              <div class="quick-item" id="quickRunHumanized">
+                <div class="quick-tag adv">ADVERSARIAL</div>
+                <div class="quick-info">
+                  <strong>Commercial Humanizer + Hidden Characters</strong>
+                  <span>QuillBot rewrite with invisible zero-width unicode</span>
+                </div>
+                <button class="btn-quick-run">Inspect →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Results State -->
+        <div class="active-results-view hidden" id="activeResultsView">
+          
+          <!-- Top Executive Verdict Card -->
+          <div class="verdict-banner" id="verdictBanner">
+            <div class="verdict-dial-container">
+              <svg class="circular-dial" viewBox="0 0 100 100">
+                <circle class="dial-bg" cx="50" cy="50" r="42" />
+                <circle class="dial-fill" id="dialFill" cx="50" cy="50" r="42" />
+              </svg>
+              <div class="dial-center">
+                <span class="dial-percentage" id="dialPercentage">0%</span>
+                <span class="dial-caption">AI PROBABILITY</span>
+              </div>
+            </div>
+
+            <div class="verdict-meta-block">
+              <div class="verdict-tag-row">
+                <span class="verdict-badge" id="verdictBadge">AI GENERATED</span>
+                <span class="confidence-pill" id="confidencePill">Very High Confidence</span>
+              </div>
+              <p class="verdict-description" id="verdictDescription">
+                Evaluated across 84 calibrated linguistic signals. Strong evidence of automated generation.
+              </p>
+              <div class="verdict-footer-stats">
+                <span>Latency: <strong id="latencyLabel">18 ms</strong></span>
+                <span class="stat-sep">•</span>
+                <span>Calibrated Reliability: <strong>99.6%</strong></span>
               </div>
             </div>
           </div>
 
-          <!-- Adversarial Security Alert Box -->
-          <div class="security-banner hidden" id="securityBanner">
-            <div class="security-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
+          <!-- Adversarial Evasion Warning Box (conditional) -->
+          <div class="adversarial-alert-box hidden" id="adversarialAlertBox">
+            <div class="alert-icon-col">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <div class="security-text">
-              <strong id="securityTitle">Adversarial Tampering Neutralized</strong>
-              <p id="securityDesc">Found 3 zero-width character insertions and 2 homoglyph substitutions designed to deceive tokenizers.</p>
+            <div class="alert-content-col">
+              <strong id="alertTitle">Adversarial Evasion Artifacts Intercepted</strong>
+              <p id="alertBody">Found 2 invisible zero-width spaces (`\u200b`) and 1 Cyrillic homoglyph substitution. AegisText sanitized these evasion techniques before feature extraction.</p>
             </div>
           </div>
 
-          <!-- Tabs for Deep Dive -->
-          <div class="result-tabs">
-            <button class="tab-btn active" data-tab="tabHeatmap">Sentence Heatmap</button>
-            <button class="tab-btn" data-tab="tabAttributions">Linguistic Signals</button>
-            <button class="tab-btn" data-tab="tabDiagnostics">Diagnostics & Flags</button>
+          <!-- Forensic Tabs -->
+          <div class="forensic-nav-tabs">
+            <button class="f-tab-btn active" data-tab="paneHeatmap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Sentence Heatmap
+            </button>
+            <button class="f-tab-btn" data-tab="paneSignals">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              Multi-Signal Radar
+            </button>
+            <button class="f-tab-btn" data-tab="paneAttributions">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Explainability Signals
+            </button>
+            <button class="f-tab-btn" data-tab="paneDiagnostics">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Diagnostics
+            </button>
           </div>
 
           <!-- Tab 1: Sentence Heatmap -->
-          <div class="tab-pane active" id="tabHeatmap">
-            <p class="section-hint">Each sentence is highlighted by AI suspicion. Click any sentence to inspect indicators.</p>
-            <div class="heatmap-container" id="sentenceHeatmapContainer"></div>
-            <div class="legend-bar">
-              <span class="legend-item"><span class="color-dot dot-low"></span> Organic Human (&lt;50%)</span>
-              <span class="legend-item"><span class="color-dot dot-mid"></span> Suspicious (50-70%)</span>
-              <span class="legend-item"><span class="color-dot dot-high"></span> Highly AI-Formulaic (&gt;70%)</span>
+          <div class="f-tab-pane active" id="paneHeatmap">
+            <div class="pane-instructions">
+              <span>Interactive Sentence Map: Click any sentence to inspect individual probability drivers.</span>
+              <div class="heatmap-legend">
+                <span class="legend-chip low"><span class="chip-color"></span> Organic (&lt;50%)</span>
+                <span class="legend-chip mid"><span class="chip-color"></span> Suspicious (50-70%)</span>
+                <span class="legend-chip high"><span class="chip-color"></span> High AI Likelihood (&gt;70%)</span>
+              </div>
+            </div>
+
+            <div class="heatmap-prose-container" id="sentenceHeatmapBox"></div>
+
+            <div class="sentence-inspector-card hidden" id="sentenceInspectorCard">
+              <div class="inspect-header">
+                <span class="inspect-title" id="inspectSentenceId">Sentence #1</span>
+                <span class="inspect-prob-badge" id="inspectProbBadge">92% AI</span>
+              </div>
+              <p class="inspect-text" id="inspectSentenceText"></p>
             </div>
           </div>
 
-          <!-- Tab 2: Feature Attributions -->
-          <div class="tab-pane" id="tabAttributions">
-            <table class="attributions-table">
-              <thead>
-                <tr>
-                  <th>Linguistic Indicator</th>
-                  <th>Observed Value</th>
-                  <th>Direction</th>
-                  <th>Impact</th>
-                </tr>
-              </thead>
-              <tbody id="attributionsTableBody"></tbody>
-            </table>
+          <!-- Tab 2: Multi-Signal Radar -->
+          <div class="f-tab-pane" id="paneSignals">
+            <div class="signals-radar-grid">
+              
+              <div class="radar-metric-card">
+                <div class="metric-top">
+                  <span class="metric-name">Stylometric Uniformity</span>
+                  <span class="metric-level" id="radarStyLevel">High</span>
+                </div>
+                <div class="metric-progress-track">
+                  <div class="metric-progress-fill" id="radarStyBar" style="width: 82%;"></div>
+                </div>
+                <span class="metric-sub">Type-Token Ratio, function word distribution, punctuation rhythm</span>
+              </div>
+
+              <div class="radar-metric-card">
+                <div class="metric-top">
+                  <span class="metric-name">Discourse Transition Density</span>
+                  <span class="metric-level" id="radarStrLevel">Elevated</span>
+                </div>
+                <div class="metric-progress-track">
+                  <div class="metric-progress-fill" id="radarStrBar" style="width: 78%;"></div>
+                </div>
+                <span class="metric-sub">Overuse of formal sequential & conclusion connectors</span>
+              </div>
+
+              <div class="radar-metric-card">
+                <div class="metric-top">
+                  <span class="metric-name">Token Shannon Predictability</span>
+                  <span class="metric-level" id="radarPredLevel">Predictable</span>
+                </div>
+                <div class="metric-progress-track">
+                  <div class="metric-progress-fill" id="radarPredBar" style="width: 89%;"></div>
+                </div>
+                <span class="metric-sub">Constrained vocabulary entropy and suppressed burstiness variance</span>
+              </div>
+
+              <div class="radar-metric-card">
+                <div class="metric-top">
+                  <span class="metric-name">Sentence Semantic Monotony</span>
+                  <span class="metric-level" id="radarSemLevel">Moderate</span>
+                </div>
+                <div class="metric-progress-track">
+                  <div class="metric-progress-fill" id="radarSemBar" style="width: 65%;"></div>
+                </div>
+                <span class="metric-sub">Consecutive sentence Jaccard similarity and cross-entropy perplexity</span>
+              </div>
+
+            </div>
           </div>
 
-          <!-- Tab 3: Diagnostics -->
-          <div class="tab-pane" id="tabDiagnostics">
-            <div class="diagnostics-list" id="diagnosticsList"></div>
+          <!-- Tab 3: Attributions Table -->
+          <div class="f-tab-pane" id="paneAttributions">
+            <div class="table-scroll-wrapper">
+              <table class="attributions-grid-table">
+                <thead>
+                  <tr>
+                    <th>Linguistic Indicator</th>
+                    <th>Observed</th>
+                    <th>Direction</th>
+                    <th>Impact Weight</th>
+                  </tr>
+                </thead>
+                <tbody id="attributionsTableBody"></tbody>
+              </table>
+            </div>
           </div>
 
-          <!-- Export Bar -->
-          <div class="export-bar">
-            <button class="btn-outline" id="btnExportJson">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Export JSON Audit
+          <!-- Tab 4: Diagnostics -->
+          <div class="f-tab-pane" id="paneDiagnostics">
+            <div class="diagnostics-feed" id="diagnosticsFeed"></div>
+          </div>
+
+          <!-- Bottom Action Suite -->
+          <div class="results-action-footer">
+            <button class="btn-action-outline" id="btnExportJson">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Audit JSON
             </button>
-            <button class="btn-outline" id="btnPrintReport">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              Print Report
+            <button class="btn-action-outline" id="btnPrintReport">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Print Audit Certificate
             </button>
           </div>
+
         </div>
-      </div>
+      </section>
+
     </div>
   </main>
 
   <!-- Empirical Benchmarks Modal -->
   <div class="modal-backdrop hidden" id="benchmarksModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Empirical Benchmark Evaluation (Phase 16)</h3>
-        <button class="btn-close" id="btnCloseBenchmarks">&times;</button>
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <div class="modal-head-title">
+          <h3>Empirical Research Benchmarks (Phase 16 & 17)</h3>
+          <span>Multi-Domain Ground-Truth Test Split (419 Samples, Zero Data Leakage)</span>
+        </div>
+        <button class="btn-modal-close" id="btnCloseBenchmarks">&times;</button>
       </div>
-      <div class="modal-body">
-        <p class="modal-lead">All metrics below were computed on the 419-sample multi-domain benchmark test split with strict grouped splitting and zero data leakage.</p>
-        
-        <div class="metrics-grid">
-          <div class="metric-tile">
-            <span class="m-val">0.9959</span>
-            <span class="m-lbl">Clean ROC-AUC</span>
+
+      <div class="modal-content-scroll">
+        <!-- 4 Key Numbers -->
+        <div class="benchmark-kpi-grid">
+          <div class="kpi-cell">
+            <span class="kpi-num">0.9959</span>
+            <span class="kpi-name">Multi-Domain ROC-AUC</span>
           </div>
-          <div class="metric-tile">
-            <span class="m-val">0.0714</span>
-            <span class="m-lbl">FPR @ 95% TPR</span>
+          <div class="kpi-cell">
+            <span class="kpi-num">0.0714</span>
+            <span class="kpi-name">FPR @ 95% TPR</span>
           </div>
-          <div class="metric-tile">
-            <span class="m-val">0.0650</span>
-            <span class="m-lbl">Expected Calibration Error</span>
+          <div class="kpi-cell">
+            <span class="kpi-num">0.0650</span>
+            <span class="kpi-name">Expected Calibration Error (ECE)</span>
           </div>
-          <div class="metric-tile">
-            <span class="m-val">0.9980</span>
-            <span class="m-lbl">Humanized Test AUROC</span>
+          <div class="kpi-cell">
+            <span class="kpi-num">0.9980</span>
+            <span class="kpi-name">Humanized AI AUROC</span>
           </div>
         </div>
 
-        <h4 class="mt-4">Adversarial Robustness Resilience:</h4>
-        <table class="benchmark-table">
+        <h4 class="subhead">Model Comparison: Clean Multi-Domain Benchmark</h4>
+        <table class="benchmark-data-table">
           <thead>
             <tr>
-              <th>Attack Vector</th>
-              <th>Attack Mechanism</th>
-              <th>AegisText AUROC</th>
-              <th>Status</th>
+              <th>Model</th>
+              <th>ROC-AUC</th>
+              <th>PR-AUC</th>
+              <th>F1-Score</th>
+              <th>Accuracy</th>
+              <th>Calibration ECE</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Zero-Width Injection</strong></td>
-              <td>Invisible unicode token boundary breaking</td>
-              <td>0.9959</td>
-              <td><span class="badge-tag green">100% Neutralized</span></td>
+              <td><strong>Logistic Regression</strong></td>
+              <td>0.9949</td>
+              <td>0.9963</td>
+              <td>0.9565</td>
+              <td>95.24%</td>
+              <td>0.0393</td>
             </tr>
             <tr>
-              <td><strong>Homoglyph Substitution</strong></td>
-              <td>Cyrillic / Greek confusable spoofing</td>
-              <td>0.9959</td>
-              <td><span class="badge-tag green">100% Neutralized</span></td>
+              <td><strong>Random Forest</strong></td>
+              <td>0.9990</td>
+              <td>0.9992</td>
+              <td>0.9859</td>
+              <td>98.41%</td>
+              <td>0.1316</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>AegisText Calibrated Ensemble</strong></td>
+              <td><strong>0.9959</strong></td>
+              <td><strong>0.9969</strong></td>
+              <td><strong>0.9429</strong></td>
+              <td><strong>93.65%</strong></td>
+              <td><strong>0.0650 (Well Calibrated)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 class="subhead mt-3">Adversarial Robustness Resilience</h4>
+        <table class="benchmark-data-table">
+          <thead>
+            <tr>
+              <th>Evasion Vector</th>
+              <th>Mechanism</th>
+              <th>AegisText AUROC</th>
+              <th>Defense Verification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Zero-Width Spaces (`\u200b`, `\u200c`)</td>
+              <td>Breaks subword tokenization</td>
+              <td><strong>0.9959</strong></td>
+              <td><span class="status-badge green">100% Sanitized</span></td>
             </tr>
             <tr>
-              <td><strong>Commercial Humanizer</strong></td>
-              <td>QuillBot / Undetectable.ai paraphrasing</td>
-              <td>0.9980</td>
-              <td><span class="badge-tag green">Defended</span></td>
+              <td>Cyrillic / Greek Homoglyphs</td>
+              <td>Confusable visual substitution</td>
+              <td><strong>0.9959</strong></td>
+              <td><span class="status-badge green">100% Normalized</span></td>
             </tr>
             <tr>
-              <td><strong>Synonym Jitter</strong></td>
-              <td>Contextual lexical substitution</td>
-              <td>0.9959</td>
-              <td><span class="badge-tag green">Defended</span></td>
+              <td>Commercial AI Humanizer</td>
+              <td>QuillBot / Undetectable.ai paraphrase</td>
+              <td><strong>0.9980</strong></td>
+              <td><span class="status-badge green">Defended</span></td>
+            </tr>
+            <tr>
+              <td>Synonym Replacement</td>
+              <td>Contextual lexical swapping</td>
+              <td><strong>0.9959</strong></td>
+              <td><span class="status-badge green">Defended</span></td>
             </tr>
           </tbody>
         </table>
